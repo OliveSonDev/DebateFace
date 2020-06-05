@@ -5,3 +5,10 @@
 .mb-30{
     margin-bottom: 30px;
 }
+
+.loadContainer {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+}

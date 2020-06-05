@@ -102,7 +102,10 @@
 
     <main class="py-4">
         <div class="container">
-            
+            <div class = "loadContainer">
+                <img src = "{{ asset('img/loading.gif') }}" alt = "loading" >
+                <div> Creating Debate ... Please wait... </div>
+            </div>
         </div>
     </main>
 </div>
@@ -132,17 +135,28 @@ $(document).ready(function() {
                     success: function(pluginHandle) {
                         sfutest = pluginHandle;
                         
-                        var create = { "request": "create", "room": myroom, "description": "{{ $topic }}", "secret" : "{{ $adminkey }}", "pin" : "{{ $password }}"};
+                        var create = { "request": "create", "room": parseInt(roomId), "description": "{{ $topic }}", "secret" : "{{ $adminkey }}", "pin" : "{{ $password }}"};
                         
-                        sfutest.send({"message": create});
-                    },
-                    onmessage: function(msg, jsep) {
-                        var event = msg["videoroom"];
-                        if( event != "created" )
+                        sfutest.send(
                         {
-                            console.log(msg);
-                        }
-                    },
+                            "message": create,
+                            success: function( result ) {
+                                var event = msg["videoroom"];
+                                if( event != undefined && event != null )
+                                    if ( event == "created" )
+                                        window.location = '/debate/' + roomId;
+                                else
+                                {
+                                    alert( msg );
+                                    window.location = '/home';
+                                }
+                            },
+                            onmessage: function( msg, jsep ){
+                                alert( msg );
+                                window.location = '/home';
+                            }
+                        });
+                    }
                     error: function(error) {
                         alert(error);
                         window.location = '/home';
@@ -151,7 +165,7 @@ $(document).ready(function() {
             },
             error: function(error) {
                 alert(error);
-                window.location = '/home';
+                //window.location = '/home';
             },
             destroyed: function() {
                 window.location.reload();
