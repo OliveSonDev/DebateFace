@@ -8,14 +8,14 @@
                 <div class="card-header">{{ __('Start a Debate') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('gostart') }}">
                         @csrf
 
                         <div class="form-group row">
                             <label for="email" class="col-md-5 col-form-label text-md-right">{{ __('Topic of your Debate ?') }}</label>
 
                             <div class="col-md-6">
-                                <input id="topic" type="email" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="topic" value="{{ old('email') }}" required autofocus>
+                                <input id="topic" type="text" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="topic" value="{{ old('email') }}" required autofocus>
 
                                 @if ($errors->has('topic'))
                                     <span class="invalid-feedback" role="alert">
@@ -31,14 +31,14 @@
                             <div class="col-md-6 ">
                                 <div class="form-check">
                                     <div>
-                                        <input class="form-check-input" type="radio" name="debatetype" id="publictype" checked>
+                                        <input class="form-check-input" type="radio" name="debatetype" id="publictype" value = "0" checked>
 
                                         <label class="form-check-label" for="publictype">
                                             {{ __('Public') }}
                                         </label>
                                     </div>
                                     <div>
-                                        <input class="form-check-input" type="radio" name="debatetype" id="privatetype" >
+                                        <input class="form-check-input" type="radio" name="debatetype" id="privatetype" value = "1" >
 
                                         <label class="form-check-label" for="privatetype">
                                             {{ __('Private') }}
@@ -77,14 +77,28 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="invite" class="col-md-5 col-form-label text-md-right">{{ __('People you want to invite to watch') }}</label>
+                            <label for="invite" class="col-md-5 col-form-label text-md-right">{{ __('Invite User 1 email :') }}</label>
 
                             <div class="col-md-6">
-                                <input id="invite" data-role="tagsinput" type="text" placeholder = "{{ __('ex: a@abc.com, b@abc.com') }}" class="form-control{{ $errors->has('invite') ? ' is-invalid' : '' }}" name="invite" >
+                                <input id="moderator_one" type="text" placeholder = "{{ __('Moderator Email') }}" class="form-control{{ $errors->has('moderator_one') ? ' is-invalid' : '' }}" name="moderator_one" >
 
-                                @if ($errors->has('invite'))
+                                @if ($errors->has('moderator_one'))
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('invite') }}</strong>
+                                        <strong>{{ $errors->first('moderator_one') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="invite" class="col-md-5 col-form-label text-md-right">{{ __('Invite User 2 email :') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="moderator_two" type="text" placeholder = "{{ __('Moderator Email') }}" class="form-control{{ $errors->has('moderator_two') ? ' is-invalid' : '' }}" name="moderator_two" >
+
+                                @if ($errors->has('moderator_two'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('moderator_two') }}</strong>
                                     </span>
                                 @endif
                             </div>

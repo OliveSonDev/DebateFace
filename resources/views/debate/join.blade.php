@@ -17,7 +17,7 @@
                                 <div class="form-group row">
                                     <label for="watchDebateId" class="col-md-4 offset-md-1 col-form-label text-md-right">{{ __('Debate #:') }}</label>
                                     <div class="col-md-6">
-                                        <input id="watchDebateId" type="text" onfocus = "changeFocus('watch')" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('watchDebateId') ? ' is-invalid' : '' }}" name="watchDebateId" required>
+                                        <input id="watchDebateId" type="text" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('watchDebateId') ? ' is-invalid' : '' }}" name="watchDebateId" required>
 
                                         @if ($errors->has('watchDebateId'))
                                             <span class="invalid-feedback" role="alert">
@@ -29,7 +29,7 @@
                                 <div class="form-group row">
                                     <label for="watchPassword" class="col-md-4 offset-md-1 col-form-label text-md-right">{{ __('Password:') }}</label>
                                     <div class="col-md-6">
-                                        <input id="watchPassword" type="password" onfocus = "changeFocus('watch')" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('watchPassword') ? ' is-invalid' : '' }}" name="watchPassword" required>
+                                        <input id="watchPassword" type="password" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('watchPassword') ? ' is-invalid' : '' }}" name="watchPassword" required>
 
                                         @if ($errors->has('watchPassword'))
                                             <span class="invalid-feedback" role="alert">
@@ -44,7 +44,7 @@
                                 <div class="form-group row">
                                     <label for="joinDebateId" class="col-md-4 offset-md-1 col-form-label text-md-right">{{ __('Debate #:') }}</label>
                                     <div class="col-md-6">
-                                        <input id="joinDebateId" type="text" onfocus = "changeFocus('join')" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('joinDebateId') ? ' is-invalid' : '' }}" name="joinDebateId" required>
+                                        <input id="joinDebateId" type="text" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('joinDebateId') ? ' is-invalid' : '' }}" name="joinDebateId" required>
 
                                         @if ($errors->has('joinDebateId'))
                                             <span class="invalid-feedback" role="alert">
@@ -56,7 +56,7 @@
                                 <div class="form-group row">
                                     <label for="joinPassword" class="col-md-4 offset-md-1 col-form-label text-md-right">{{ __('Password:') }}</label>
                                     <div class="col-md-6">
-                                        <input id="joinPassword" type="password" onfocus = "changeFocus('join')" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('joinPassword') ? ' is-invalid' : '' }}" name="joinPassword" required>
+                                        <input id="joinPassword" type="password" placeholder = "{{ __('Your answer') }}" class="form-control{{ $errors->has('joinPassword') ? ' is-invalid' : '' }}" name="joinPassword" required>
 
                                         @if ($errors->has('joinPassword'))
                                             <span class="invalid-feedback" role="alert">
@@ -117,4 +117,5 @@
         </div>
     </div>
 </div>
+
 @endsection

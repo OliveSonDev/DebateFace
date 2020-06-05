@@ -17,6 +17,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/start', 'StartController@index')->name('start');
-Route::get('/join', 'JoinController@index')->name('join');
+
+Route::get('/start', 'DebateController@start')->name('start');
+Route::post('/gostart', 'DebateController@gostart')->name('gostart');
+
+Route::get('/join', 'DebateController@join')->name('join');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
