@@ -12,3 +12,89 @@
     text-align: center;
     align-items: center;
 }
+
+.modCtrlDiv {
+    margin-top: 30px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    
+}
+
+.modCtrlButtons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.modCtrlImgDiv {
+    padding: 4px;
+}
+
+.modCtrlImgDiv:hover {
+    border: 3px solid red;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modCtrlImg {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.modStatusContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modStatusCtrl {
+    padding: 4px;
+}
+
+.modStatusCtrl:hover {
+    border: 3px solid red;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modStatusImg {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.commentAvatar {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.commentText {
+    width: 100%;
+    height: 100px;
+    border: 0px ;
+    border-radius: 5px;
+    resize: none;
+}
+
+.myCommentText {
+    width: 100%;
+    height: 150px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    resize: none;
+}
+
+.doCommentBtn {
+    padding: 5px 10px;
+    border-radius: 3px;
+    background-color: green;
+    color: white;
+    border: 0px;
+}
+
+.doCommentBtn:hover {
+    background-color: blue;
+    cursor: pointer;
+}

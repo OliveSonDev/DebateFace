@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
   
 use Auth;
+use App\User;
 use App\Debate;
 use Illuminate\Http\Request;
   
@@ -74,7 +75,7 @@ class DebateController extends Controller
     }
 
     /**
-     * Return User Type on a Debate
+     * Show a debate
      */
     public function debate($id, $password = NULL)
     {
@@ -103,5 +104,32 @@ class DebateController extends Controller
                ->with('usertype', $usertype)
                ->with('roomId', $id)
                ->with('pin', $password);
+    }
+
+    /**
+     * Return a username of a moderator in a debate
+     */
+
+    public function getUserName(Request $request)
+    {
+        if( $request['type'] == NULL || $request['roomId'] == NULL )
+            return response()->json(['']);
+        
+        $debate = Debate::where('id', $request['roomId'])->first();
+        
+        if( $debate == NULL )
+            return response()->json(['']);
+        
+        $email = ($request['type'] == 'one' ? $debate->moderator_one : $debate->moderator_two);
+
+        if( $email == NULL )
+            return response()->json(['']);
+        
+        $user = User::where('email', $email)->first();
+        
+        if( $user == NULL )
+            return response()->json(['']);
+        else
+            return response()->json(['name' => $user->name]);
     }
 }

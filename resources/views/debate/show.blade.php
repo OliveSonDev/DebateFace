@@ -102,28 +102,126 @@
 
     <main class="py-4">
         <div class="container">
-            <div class = "row">
-                <div class = "col-md-12 text-center"> <h2 class="py-4"> Topic: {{ $debate->topic }} </h2> </div>
-            </div>
             @if ( $usertype == 'debator' ) 
                 <div class = "row">
                     <div class = "col-md-3 offset-md-2">
-
+                        <div class = "modCtrlDiv">
+                            <div>
+                                <div class = "modCtrlButtons">
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Mute </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/mute.png') }}" class = "modCtrlImg" alt = "mute"> 
+                                        </div>
+                                    </div>
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Timer </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/timer.png') }}" class = "modCtrlImg" alt = "timer"> 
+                                        </div>
+                                    </div>
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Boot </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/boot.png') }}" class = "modCtrlImg" alt = "boot"> 
+                                        </div>
+                                    </div>
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Send Invite </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/email.png') }}" class = "modCtrlImg" alt = "email"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = "text-center mt-1"> <h4 id = "username_one"> User: <h4> </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-2">
+                        <div class="panel-heading">
+                            <h3 class="panel-title text-center">Moderator<span class="label label-info hide" id="remote1"></span></h3>
+                        </div>
                         <div class="panel panel-default">
                             <div class="panel-body relative" id="debator_container">
                                 <video class="rounded centered" id="debator" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
+                            <div class = "py-2"> <h5 class = "text-center"> Your Debate </h5> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class = "modCtrlDiv">
+                            <div>
+                                <div class = "modCtrlButtons">
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Mute </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/mute.png') }}" class = "modCtrlImg" alt = "mute"> 
+                                        </div>
+                                    </div>
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Timer </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/timer.png') }}" class = "modCtrlImg" alt = "timer"> 
+                                        </div>
+                                    </div>
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Boot </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/boot.png') }}" class = "modCtrlImg" alt = "boot"> 
+                                        </div>
+                                    </div>
+                                    <div class = "modCtrlContainer">
+                                        <div class = "text-center"> Send Invite </div>
+                                        <div class = "modCtrlImgDiv">
+                                            <img src = "{{ asset('img/email.png') }}" class = "modCtrlImg" alt = "email"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = "text-center mt-1"> <h4 id = "username_two"> User: <h4> </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class = "row">
+                    <div class = "col-md-12 text-center py-4">
+                        <div> <h2 class=""> Topic: {{ $debate->topic }} </h2> </div>
+                        <div> <h5 class=""> Debate #: {{ $debate->id }} </h5> </div>
+                    </div>
+                </div>
+                
                 <div class = "row">
                     <div class="col-md-4 offset-md-2">
                         <div class="panel panel-default">
                             <div class="panel-body relative" id="moderator_one_container">
                                 <video class="rounded centered" id="moderator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
+                        </div>
+                        <div class="modStatusContainer mt-2">
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                </div>
+                                <div class = "text-center"> {{ $debate->one_upvote }} </div>
+                            </div>
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                </div>
+                                <div class = "text-center"> {{ $debate->one_downvote }} </div>
+                            </div>
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                </div>
+                                <div class = "text-center"> {{ $debate->one_heart }} </div>
+                            </div>
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                </div>
+                                <div class = "text-center"> {{ $debate->one_sharp }} </div>
+                            </div>
+                            <div class = "text-center text-middle"> <h4> Time Left: 2:00 </h4> </div>
                         </div>
                     </div>
                     <div class="col-md-4" >
@@ -132,48 +230,166 @@
                                 <video class="rounded centered" id="moderator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
+                        <div class="modStatusContainer mt-2">
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                </div>
+                                <div class = "text-center"> {{ $debate->two_upvote }} </div>
+                            </div>
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                </div>
+                                <div class = "text-center"> {{ $debate->two_downvote }} </div>
+                            </div>
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                </div>
+                                <div class = "text-center"> {{ $debate->two_heart }} </div>
+                            </div>
+                            <div class = "text-center">
+                                <div class = "modStatusCtrl">
+                                    <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                </div>
+                                <div class = "text-center"> {{ $debate->two_sharp }} </div>
+                            </div>
+                            <div class = "text-center text-middle"> <h4> Time Left: 2:00 </h4> </div>
+                        </div>
                     </div>
                 </div>
             @else
                 <div class = "row">
-                    <div class = "col-md-4 offset-md-1">
-
-                    </div>
-                    <div class="col-md-2">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Debator<span class="label label-info hide" id="remote1"></span></h3>
-                            </div>
-                            <div class="panel-body relative" id="debator_container">
-                                <video class="rounded centered" id="debator" width="100%" height="100%" autoplay playsinline muted="muted"/>
-                            </div>
-                        </div>
+                    <div class = "col-md-12 text-center py-4">
+                        <div> <h2 class=""> Topic: {{ $debate->topic }} </h2> </div>
                     </div>
                 </div>
                 <div class = "row">
                     <div class="col-md-4 offset-md-2">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Moderator One<span class="label label-info hide" id="remote2"></span></h3>
-                            </div>
                             <div class="panel-body relative" id="moderator_one_container">
                                 <video class="rounded centered" id="moderator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
+                        <div class = "modStatusContainer mt-1">
+                            <div> <h4 id = "username_one"> User: <h4> </div>
+                            <div> <h4> Time left: 1.47 </h4> </div>
+                        </div>
                     </div>
-                    <div class="col-md-4 offset-md-2" >
+                    <div class="col-md-4" >
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Moderator Two<span class="label label-info hide" id="remote3"></span></h3>
-                            </div>
                             <div class="panel-body relative" id="moderator_two_container">
                                 <video class="rounded centered" id="moderator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            </div>
+                        </div>
+                        <div class = "modStatusContainer mt-1">
+                            <div> <h4 id = "username_two"> User: <h4> </div>
+                            <div> <h4> Time left: 1.47 </h4> </div>
+                        </div>
+                    </div>
+                </div>
+                <div class = "row mt-2">
+                    <div class = "col-md-3 offset-md-2">
+                        <div class = "modCtrlDiv">
+                            <div class = "modStatusContainer">
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->one_upvote }} </div>
+                                </div>
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->one_downvote }} </div>
+                                </div>
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->one_heart }} </div>
+                                </div>
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->one_sharp }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title text-center">Debator<span class="label label-info hide" id="remote1"></span></h3>
+                            </div>
+                            <div class="panel-body relative" id="debator_container">
+                                <video class="rounded centered" id="debator" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            </div>
+                            <div class = "mt-2 text-center"> <h5> Debate #: {{ $debate->id }} </h5> </div>
+                        </div>
+                    </div>
+                    <div class = "col-md-3 ">
+                        <div class = "modCtrlDiv">
+                            <div class = "modStatusContainer">
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->two_upvote }} </div>
+                                </div>
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->two_downvote }} </div>
+                                </div>
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->two_heart }} </div>
+                                </div>
+                                <div class = "text-center">
+                                    <div class = "modStatusCtrl">
+                                        <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                    </div>
+                                    <div class = "text-center"> {{ $debate->two_sharp }} </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             @endif
-            
+            <div class = "row mt-4">
+                <div class = "col-md-2 text-right">
+                    <img src = "{{ asset('img/avatar.png') }}" alt = "commentAvatar" class = "commentAvatar">
+                </div>
+                <div class = "col-md-8">
+                    <div class = "commentText"> User 1 Commented </div>
+                </div>
+            </div>
+            <div class = "row">
+                <div class = "col-md-2 text-right">
+                    <img src = "{{ asset('img/avatar.png') }}" alt = "commentAvatar" class = "commentAvatar">
+                </div>
+                <div class = "col-md-8">
+                    <div class = "commentText"> User 2 Commented </div>
+                </div>
+            </div>
+            <div class = "row">
+                <div class = "col-md-2 text-right">
+                    Your Comment
+                </div>
+                <div class = "col-md-8">
+                    <textarea class = "myCommentText">  </textarea>
+                </div>
+                <div class = "col-md-2 text-left">
+                    <button class = "doCommentBtn">Send Comment</button>
+                </div>
+            </div>
         </div>
     </main>
 </div>
@@ -435,6 +651,21 @@ function publishOwnFeed(useAudio) {
     });
 }
 
+function setUserName( usertype )
+{
+    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+
+    $.ajax({
+        type:'POST',
+        url:"{{ route('getusername') }}",
+        data:{ type: usertype, roomId: roomId },
+        success: function(data){
+            if( data.name )
+                $("#username_" + usertype)[0].innerHTML = 'User: ' + data.name;
+        }
+    });
+}
+
 function newRemoteFeed(id, display, audio, video) {
 	console.log(id, display);
 	// A new feed has been published, create a new plugin handle and attach to it as a subscriber
@@ -444,6 +675,12 @@ function newRemoteFeed(id, display, audio, video) {
 
     if( ( username != "subscriber" ) && username == display )
         return;
+
+    // Get UserName of moderator
+    if( display == "moderator_one" )
+        setUserName('one');
+    else if( display == "moderator_two" )
+        setUserName('two');
 
 	janus.attach(
     {
