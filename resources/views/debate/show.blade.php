@@ -447,6 +447,9 @@ $(document).ready(function() {
                         var event = msg["videoroom"];
                         console.log(msg);
 
+                        setUserName("one");
+                        setUserName("two");
+
                         if(event != undefined && event != null) {
                             if(event === "joined") {
                                 myid = msg["id"];
