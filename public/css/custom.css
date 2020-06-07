@@ -98,3 +98,8 @@
     background-color: blue;
     cursor: pointer;
 }
+
+.videoContainer {
+    background:grey;
+    border-radius: 5px;
+}

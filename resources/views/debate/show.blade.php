@@ -142,7 +142,7 @@
                             <h3 class="panel-title text-center">Moderator<span class="label label-info hide" id="remote1"></span></h3>
                         </div>
                         <div class="panel panel-default">
-                            <div class="panel-body relative" id="debator_container">
+                            <div class="panel-body relative videoContainer" id="debator_container">
                                 <video class="rounded centered" id="debator" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                             <div class = "py-2"> <h5 class = "text-center"> Your Debate </h5> </div>
@@ -192,7 +192,7 @@
                 <div class = "row">
                     <div class="col-md-4 offset-md-2">
                         <div class="panel panel-default">
-                            <div class="panel-body relative" id="moderator_one_container">
+                            <div class="panel-body relative videoContainer" id="moderator_one_container">
                                 <video class="rounded centered" id="moderator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
@@ -226,7 +226,7 @@
                     </div>
                     <div class="col-md-4" >
                         <div class="panel panel-default">
-                            <div class="panel-body relative" id="moderator_two_container">
+                            <div class="panel-body relative videoContainer" id="moderator_two_container">
                                 <video class="rounded centered" id="moderator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
@@ -268,7 +268,7 @@
                 <div class = "row">
                     <div class="col-md-4 offset-md-2">
                         <div class="panel panel-default">
-                            <div class="panel-body relative" id="moderator_one_container">
+                            <div class="panel-body relative videoContainer" id="moderator_one_container">
                                 <video class="rounded centered" id="moderator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
@@ -279,7 +279,7 @@
                     </div>
                     <div class="col-md-4" >
                         <div class="panel panel-default">
-                            <div class="panel-body relative" id="moderator_two_container">
+                            <div class="panel-body relative videoContainer" id="moderator_two_container">
                                 <video class="rounded centered" id="moderator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
@@ -325,7 +325,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title text-center">Debator<span class="label label-info hide" id="remote1"></span></h3>
                             </div>
-                            <div class="panel-body relative" id="debator_container">
+                            <div class="panel-body relative videoContainer" id="debator_container">
                                 <video class="rounded centered" id="debator" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                             <div class = "mt-2 text-center"> <h5> Debate #: {{ $debate->id }} </h5> </div>
