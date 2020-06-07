@@ -72,4 +72,36 @@ class DebateController extends Controller
                ->with('adminkey', $debate->adminkey)
                ->with('password', $request['password'] != NULL ? $request['password'] : '');
     }
+
+    /**
+     * Return User Type on a Debate
+     */
+    public function debate($id, $password = NULL)
+    {
+        if( $id == NULL || $id == '' )
+            return view('debate.error')->with('error', 'Wrong Input...');
+        
+        $debate = Debate::where('id', $id)->first();
+
+        if( $debate == NULL )
+            return view('debate.error')->with('error', 'Cannot find debate...');
+
+        if( $debate->password != $password )
+            return view('debate.error')->with('error', 'Password does not match...');
+
+        if( $debate->debator == Auth::user()->id )
+            $usertype = 'debator';
+        else if( $debate->moderator_one == Auth::user()->email )
+            $usertype = 'moderator_one';
+        else if( $debate->moderator_two == Auth::user()->email )
+            $usertype = 'moderator_two';
+        else
+            $usertype = 'subscriber';
+
+        return view('debate.show')
+               ->with('debate', $debate)
+               ->with('usertype', $usertype)
+               ->with('roomId', $id)
+               ->with('pin', $password);
+    }
 }

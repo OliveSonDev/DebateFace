@@ -23,3 +23,6 @@ Route::post('/gostart', 'DebateController@gostart')->name('gostart');
 
 Route::get('/join', 'DebateController@join')->name('join');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+Route::get('/debate/{id}', 'DebateController@debate')->name('debate');
+Route::get('/debate/{id}/{password}', 'DebateController@debate')->name('debate');

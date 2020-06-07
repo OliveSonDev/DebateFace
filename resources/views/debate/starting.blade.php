@@ -140,11 +140,11 @@ $(document).ready(function() {
                         sfutest.send(
                         {
                             "message": create,
-                            success: function( result ) {
+                            success: function( msg ) {
                                 var event = msg["videoroom"];
                                 if( event != undefined && event != null )
                                     if ( event == "created" )
-                                        window.location = '/debate/' + roomId;
+                                        window.location = '/debate/' + roomId + '/' + "{{ $password }}";
                                 else
                                 {
                                     alert( msg );
@@ -156,7 +156,7 @@ $(document).ready(function() {
                                 window.location = '/home';
                             }
                         });
-                    }
+                    },
                     error: function(error) {
                         alert(error);
                         window.location = '/home';
