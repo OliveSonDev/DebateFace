@@ -6,6 +6,7 @@ use Auth;
 use App\User;
 use App\Debate;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
   
 class DebateController extends Controller
 {
@@ -131,5 +132,45 @@ class DebateController extends Controller
             return response()->json(['']);
         else
             return response()->json(['name' => $user->name]);
+    }
+
+    /**
+     * Join/Watch a debate
+     */
+    public function goForJoin(Request $request)
+    {
+        if( $request['watchDebateId'] != NULL )
+        {
+            if( $request['watchPassword'] == NULL )
+                return redirect('debate/'.$request['watchDebateId'] );
+            else
+                return redirect('debate/'.$request['watchDebateId'].'/'.$request['watchPassword'] );
+        }
+        else if( $request['joinDebateId'] != NULL )
+        {
+            $debate = Debate::where('id', $request['joinDebateId'])->first();
+            if( $debate != NULL )
+            {
+                if( $debate->moderator_one == NULL )
+                {
+                    $debate->moderator_one = Auth::user()->email;
+                    $debate->save();
+                }
+                else if( $debate->moderator_two == NULL )
+                {
+                    $debate->moderator_two = Auth::user()->email;
+                    $debate->save();
+                }
+                else
+                    return view('debate.error')->with('error', 'Full or moderators...');
+            }
+
+            if( $request['joinPassword'] == NULL )
+                return redirect('debate/'.$request['joinDebateId'] );
+            else
+                return redirect('debate/'.$request['joinDebateId'].'/'.$request['joinPassword'] );
+        }
+        else
+            return redirect('join');
     }
 }

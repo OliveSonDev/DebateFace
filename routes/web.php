@@ -28,3 +28,5 @@ Route::get('/debate/{id}', 'DebateController@debate')->name('debate');
 Route::get('/debate/{id}/{password}', 'DebateController@debate')->name('debate');
 
 Route::post('/getusername', 'DebateController@getUserName')->name('getusername');
+
+Route::post('/goforjoin', 'DebateController@goForJoin')->name('goforjoin');
