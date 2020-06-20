@@ -151,24 +151,29 @@ class DebateController extends Controller
             $debate = Debate::where('id', $request['joinDebateId'])->first();
             if( $debate != NULL )
             {
-                if( $debate->moderator_one == NULL )
+                if( $debate->moderator_one != Auth::user()->email && $debate->moderator_two != Auth::user()->email )
                 {
-                    $debate->moderator_one = Auth::user()->email;
-                    $debate->save();
+                    if( $debate->moderator_one == NULL )
+                    {
+                        $debate->moderator_one = Auth::user()->email;
+                        $debate->save();
+                    }
+                    else if( $debate->moderator_two == NULL )
+                    {
+                        $debate->moderator_two = Auth::user()->email;
+                        $debate->save();
+                    }
+                    else
+                        return view('debate.error')->with('error', 'Full of moderators...');
                 }
-                else if( $debate->moderator_two == NULL )
-                {
-                    $debate->moderator_two = Auth::user()->email;
-                    $debate->save();
-                }
+                
+                if( $request['joinPassword'] == NULL )
+                    return redirect('debate/'.$request['joinDebateId'] );
                 else
-                    return view('debate.error')->with('error', 'Full or moderators...');
+                    return redirect('debate/'.$request['joinDebateId'].'/'.$request['joinPassword'] );
             }
-
-            if( $request['joinPassword'] == NULL )
-                return redirect('debate/'.$request['joinDebateId'] );
             else
-                return redirect('debate/'.$request['joinDebateId'].'/'.$request['joinPassword'] );
+                return view('debate.error')->with('error', 'No such debate...');
         }
         else
             return redirect('join');
