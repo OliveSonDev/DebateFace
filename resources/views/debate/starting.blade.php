@@ -144,7 +144,7 @@ $(document).ready(function() {
                                 var event = msg["videoroom"];
                                 if( event != undefined && event != null )
                                     if ( event == "created" )
-                                        window.location = '/debate/' + roomId + '/' + "{{ $password }}";
+                                        window.location = '/debate/' + roomId + '/' + "{{ base64_encode($password) }}";
                                 else
                                 {
                                     alert( msg );

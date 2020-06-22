@@ -24,7 +24,10 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" ></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.1.0/bootbox.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
 <script type="text/javascript" src="{{ asset('js/janus.js') }}" ></script>
+<script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>
 
 <link rel="stylesheet" href="{{ asset('css/demo.css') }}" type="text/css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css"/>
@@ -102,7 +105,7 @@
 
     <main class="py-4">
         <div class="container">
-            @if ( $usertype == 'debator' ) 
+            @if ( $usertype == 'moderator' ) 
                 <div class = "row">
                     <div class = "col-md-3 offset-md-2">
                         <div class = "modCtrlDiv">
@@ -110,19 +113,19 @@
                                 <div class = "modCtrlButtons">
                                     <div class = "modCtrlContainer">
                                         <div class = "text-center"> Mute </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "mute('debator_one')">
                                             <img src = "{{ asset('img/mute.png') }}" class = "modCtrlImg" alt = "mute"> 
                                         </div>
                                     </div>
                                     <div class = "modCtrlContainer">
                                         <div class = "text-center"> Timer </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "timelimit('one')">
                                             <img src = "{{ asset('img/timer.png') }}" class = "modCtrlImg" alt = "timer"> 
                                         </div>
                                     </div>
                                     <div class = "modCtrlContainer">
                                         <div class = "text-center"> Boot </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "kick('one')">
                                             <img src = "{{ asset('img/boot.png') }}" class = "modCtrlImg" alt = "boot"> 
                                         </div>
                                     </div>
@@ -142,8 +145,8 @@
                             <h3 class="panel-title text-center">Moderator<span class="label label-info hide" id="remote1"></span></h3>
                         </div>
                         <div class="panel panel-default">
-                            <div class="panel-body relative videoContainer" id="debator_container">
-                                <video class="rounded centered" id="debator" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            <div class="panel-body relative videoContainer" id="moderator_container">
+                                <video class="rounded centered" id="moderator" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                             <div class = "py-2"> <h5 class = "text-center"> Your Debate </h5> </div>
                         </div>
@@ -154,19 +157,19 @@
                                 <div class = "modCtrlButtons">
                                     <div class = "modCtrlContainer">
                                         <div class = "text-center"> Mute </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "mute('debator_two')">
                                             <img src = "{{ asset('img/mute.png') }}" class = "modCtrlImg" alt = "mute"> 
                                         </div>
                                     </div>
                                     <div class = "modCtrlContainer">
                                         <div class = "text-center"> Timer </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "timelimit('two')">
                                             <img src = "{{ asset('img/timer.png') }}" class = "modCtrlImg" alt = "timer"> 
                                         </div>
                                     </div>
                                     <div class = "modCtrlContainer">
                                         <div class = "text-center"> Boot </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "kick('two')">
                                             <img src = "{{ asset('img/boot.png') }}" class = "modCtrlImg" alt = "boot"> 
                                         </div>
                                     </div>
@@ -192,10 +195,21 @@
                 <div class = "row">
                     <div class="col-md-4 offset-md-2">
                         <div class="panel panel-default">
-                            <div class="panel-body relative videoContainer" id="moderator_one_container">
-                                <video class="rounded centered" id="moderator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            <div class="panel-body relative videoContainer" id="debator_one_container">
+                                <video class="rounded centered" id="debator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-4" >
+                        <div class="panel panel-default">
+                            <div class="panel-body relative videoContainer" id="debator_two_container">
+                                <video class="rounded centered" id="debator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class = "row">
+                    <div class = "col-md-4 offset-md-2">
                         <div class="modStatusContainer mt-2">
                             <div class = "text-center">
                                 <div class = "modStatusCtrl">
@@ -224,12 +238,7 @@
                             <div class = "text-center text-middle"> <h4> Time Left: 2:00 </h4> </div>
                         </div>
                     </div>
-                    <div class="col-md-4" >
-                        <div class="panel panel-default">
-                            <div class="panel-body relative videoContainer" id="moderator_two_container">
-                                <video class="rounded centered" id="moderator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
-                            </div>
-                        </div>
+                    <div class = "col-md-4">
                         <div class="modStatusContainer mt-2">
                             <div class = "text-center">
                                 <div class = "modStatusCtrl">
@@ -268,8 +277,8 @@
                 <div class = "row">
                     <div class="col-md-4 offset-md-2">
                         <div class="panel panel-default">
-                            <div class="panel-body relative videoContainer" id="moderator_one_container">
-                                <video class="rounded centered" id="moderator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            <div class="panel-body relative videoContainer" id="debator_one_container">
+                                <video class="rounded centered" id="debator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
                         <div class = "modStatusContainer mt-1">
@@ -279,8 +288,8 @@
                     </div>
                     <div class="col-md-4" >
                         <div class="panel panel-default">
-                            <div class="panel-body relative videoContainer" id="moderator_two_container">
-                                <video class="rounded centered" id="moderator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            <div class="panel-body relative videoContainer" id="debator_two_container">
+                                <video class="rounded centered" id="debator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                         </div>
                         <div class = "modStatusContainer mt-1">
@@ -323,10 +332,10 @@
                     <div class="col-md-2">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title text-center">Debator<span class="label label-info hide" id="remote1"></span></h3>
+                                <h3 class="panel-title text-center">Moderator<span class="label label-info hide" id="remote1"></span></h3>
                             </div>
-                            <div class="panel-body relative videoContainer" id="debator_container">
-                                <video class="rounded centered" id="debator" width="100%" height="100%" autoplay playsinline muted="muted"/>
+                            <div class="panel-body relative videoContainer" id="moderator_container">
+                                <video class="rounded centered" id="moderator" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
                             <div class = "mt-2 text-center"> <h5> Debate #: {{ $debate->id }} </h5> </div>
                         </div>
@@ -414,7 +423,7 @@ var mypvtid = null;
 
 var feeds = [];
 
-if( username == 'debator' || username == 'moderator_one' || username == 'moderator_two' )
+if( username == 'moderator' || username == 'debator_one' || username == 'debator_two' )
     usertype = 'publisher';
 else
     usertype = 'subscriber';
@@ -472,6 +481,12 @@ $(document).ready(function() {
                                             var video = list[f]["video_codec"];
                                             Janus.debug("  >> [" + id + "] " + display + " (audio: " + audio + ", video: " + video + ")");
                                             newRemoteFeed(id, display, audio, video);
+                                            if( display == "moderator" )
+                                                toastr.success('Moderator joined to the debate.');
+                                            else if( display == "debator_one" )
+                                                toastr.success('First debator joined to the debate.');
+                                            else if( display == "debator_two" )
+                                                toastr.success('Second debator joined to the debate.');
                                         }
                                     }
                                 }
@@ -497,20 +512,30 @@ $(document).ready(function() {
                                             var video = list[f]["video_codec"];
                                             Janus.debug("  >> [" + id + "] " + display + " (audio: " + audio + ", video: " + video + ")");
                                             newRemoteFeed(id, display, audio, video);
+                                            if( display == "moderator" )
+                                                toastr.success('Moderator joined to the debate.');
+                                            else if( display == "debator_one" )
+                                                toastr.success('First debator joined to the debate.');
+                                            else if( display == "debator_two" )
+                                                toastr.success('Second debator joined to the debate.');
                                         }
                                     }
                                 } else if(msg["leaving"] !== undefined && msg["leaving"] !== null) {
                                     // One of the publishers has gone away?
                                     var leaving = msg["leaving"];
                                     Janus.log("Publisher left: " + leaving);
+                                    if( leaving == "ok" && msg["reason"] == "kicked")
+                                        swal("You were kicked.", { icon: "warning", });
+                                    
                                     var remoteFeed = null;
                                     for( var i = 0; i < feeds.length; i ++ ) {
                                         if ( feeds[i] && feeds[i].rfid == msg["leaving"] )
                                         {
-                                            if( feeds[i].display == "moderator_one" )
-                                                toastr.warning("Moderator One leaved the room...");
-                                            else if( feeds[i].display == "moderator_two" )
-                                                toastr.warning("Moderator Two leaved the room...");
+                                            console.log('here', feeds[i])
+                                            if( feeds[i].display == "debator_one" )
+                                                toastr.warning("First Debator leaved the room...");
+                                            else if( feeds[i].display == "debator_two" )
+                                                toastr.warning("Second Debator leaved the room...");
                                             remoteFeed = feeds[i];
                                             feeds.splice( i, 1 );
                                         }
@@ -534,10 +559,10 @@ $(document).ready(function() {
                                     for( var i = 0; i < feeds.length; i ++ ) {
                                         if ( feeds[i] && feeds[i].rfid == msg["leaving"] )
                                         {
-                                            if( feeds[i].display == "moderator_one" )
-                                                toastr.warning("Moderator One leaved the room...");
-                                            else if( feeds[i].display == "moderator_two" )
-                                                toastr.warning("Moderator Two leaved the room...");
+                                            if( feeds[i].display == "debator_one" )
+                                                toastr.warning("First Debator leaved the room...");
+                                            else if( feeds[i].display == "debator_two" )
+                                                toastr.warning("Second Debator leaved the room...");
                                             remoteFeed = feeds[i];
                                             feeds.splice( i, 1 );
                                         }
@@ -549,16 +574,11 @@ $(document).ready(function() {
                                         remoteFeed.detach();
                                     }
                                 } else if(msg["error"] !== undefined && msg["error"] !== null) {
+                                    console.log('error');
                                     if(msg["error_code"] === 426) {
-                                        // This is a "no such room" error: give a more meaningful description
-                                        bootbox.alert(
-                                            "<p>Apparently room <code>" + myroom + "</code> (the one this demo uses as a test room) " +
-                                            "does not exist...</p><p>Do you have an updated <code>janus.plugin.videoroom.jcfg</code> " +
-                                            "configuration file? If not, make sure you copy the details of room <code>" + myroom + "</code> " +
-                                            "from that sample in your current configuration file, then restart Janus and try again."
-                                        );
+                                        toastr.error('This debate does not exist anymore...');
                                     } else {
-                                        bootbox.alert(msg["error"]);
+                                        toastr.error(msg["error"]);
                                     }
                                 }
                             }
@@ -578,13 +598,6 @@ $(document).ready(function() {
                             if(mystream && mystream.getVideoTracks() && mystream.getVideoTracks().length > 0 && !video) {
                                 // Video has been rejected
                                 toastr.warning("Our video stream has been rejected, viewers won't see us");
-                                // // Hide the webcam video
-                                // $('#myvideo').hide();
-                                // $('#videolocal').append(
-                                //     '<div class="no-video-container">' +
-                                //         '<i class="fa fa-video-camera fa-5 no-video-icon" style="height: 100%;"></i>' +
-                                //         '<span class="no-video-text" style="font-size: 16px;">Video rejected, no webcam</span>' +
-                                //     '</div>');
                             }
                         }
                     },
@@ -592,21 +605,10 @@ $(document).ready(function() {
                         Janus.debug(" ::: Got a local stream :::");
                         mystream = stream;
                         Janus.debug(stream);
-                        if( username == 'debator' || username == 'moderator_one' || username == 'moderator_two' )
+                        if( username == 'moderator' || username == 'debator_one' || username == 'debator_two' )
                         {
                             Janus.attachMediaStream($('#' + username).get(0), stream);
                             $("#" + username).get(0).muted = "muted";
-                            // if(sfutest.webrtcStuff.pc.iceConnectionState !== "completed" &&
-                            //     sfutest.webrtcStuff.pc.iceConnectionState !== "connected") {
-                            //     $("#" + username + "_container").parent().parent().block({
-                            //         message: '<b>Publishing...</b>',
-                            //         css: {
-                            //             border: 'none',
-                            //             backgroundColor: 'transparent',
-                            //             color: 'white'
-                            //         }
-                            //     });
-                            // }
 
                             var videoTracks = stream.getVideoTracks();
                             if(videoTracks === null || videoTracks === undefined || videoTracks.length === 0) {
@@ -616,13 +618,11 @@ $(document).ready(function() {
                     },
                     error: function(error) {
                         console.log(error);
-                        //window.location = '/home';
                     },
                 });
             },
             error: function(error) {
                 console.log(error);
-                //window.location = '/home';
             },
             destroyed: function() {
                 window.location.reload();
@@ -635,7 +635,7 @@ function publishOwnFeed(useAudio) {
 	// Publish our stream
 	sfutest.createOffer(
     {
-        media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true },	// Publishers are sendonly
+        media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true, data: true },	// Publishers are sendonly
         success: function(jsep) {
             Janus.debug("Got publisher SDP!");
             Janus.debug(jsep);
@@ -673,16 +673,16 @@ function newRemoteFeed(id, display, audio, video) {
 	console.log(id, display);
 	// A new feed has been published, create a new plugin handle and attach to it as a subscriber
     var remoteFeed = null;
-    if( display != "debator" && display != "moderator_one" && display != "moderator_two")
+    if( display != "moderator" && display != "debator_one" && display != "debator_two")
         return;
 
     if( ( username != "subscriber" ) && username == display )
         return;
 
-    // Get UserName of moderator
-    if( display == "moderator_one" )
+    // Get UserName of debator
+    if( display == "debator_one" )
         setUserName('one');
-    else if( display == "moderator_two" )
+    else if( display == "debator_two" )
         setUserName('two');
 
 	janus.attach(
@@ -696,11 +696,6 @@ function newRemoteFeed(id, display, audio, video) {
             Janus.log("  -- This is a subscriber");
             // We wait for the plugin to send us an offer
             var subscribe = { "request": "join", "room": parseInt(roomId), "ptype": "subscriber", "feed": id, "private_id": mypvtid , "pin": "{{ $pin }}"};
-            // In case you don't want to receive audio, video or data, even if the
-            // publisher is sending them, set the 'offer_audio', 'offer_video' or
-            // 'offer_data' properties to false (they're true by default), e.g.:
-            // 		subscribe["offer_video"] = false;
-            // For example, if the publisher is VP8 and this is Safari, let's avoid video
             if(Janus.webRTCAdapter.browserDetails.browser === "safari" &&
                     (video === "vp9" || (video === "vp8" && !Janus.safariVp8))) {
                 if(video)
@@ -715,6 +710,22 @@ function newRemoteFeed(id, display, audio, video) {
             Janus.error("  -- Error attaching plugin...", error);
             bootbox.alert("Error attaching plugin... " + error);
         },
+        ondata: function( response ) {
+            var data = JSON.parse(response);
+            switch ( data.msgCode )
+            {
+                case 'mute':
+                    if( data.msgData == username )
+                    {
+                        var muted = sfutest.isAudioMuted();
+                        if(muted)
+                            sfutest.unmuteAudio();
+                        else
+                            sfutest.muteAudio();
+                    }
+                    break;
+            }
+        },
         onmessage: function(msg, jsep) {
             Janus.debug(" ::: Got a message (subscriber) :::");
             Janus.debug(msg);
@@ -725,14 +736,6 @@ function newRemoteFeed(id, display, audio, video) {
                 bootbox.alert(msg["error"]);
             } else if(event != undefined && event != null) {
                 if(event === "attached") {
-                    // Subscriber created and attached
-                    // for(var i=1;i<3;i++) {
-                    //     if(feeds[i] === undefined || feeds[i] === null) {
-                    //         feeds[i] = remoteFeed;
-                    //         remoteFeed.rfindex = i;
-                    //         break;
-                    //     }
-                    // }
                     remoteFeed.rfid = msg["id"];
                     remoteFeed.rfdisplay = msg["display"];
                     var checkFeed = feeds.filter( e => e.display && e.display == msg["display"] );
@@ -740,29 +743,7 @@ function newRemoteFeed(id, display, audio, video) {
                         checkFeed[0] = remoteFeed;
                     else
                         feeds.push(remoteFeed);
-                    // if(remoteFeed.spinner === undefined || remoteFeed.spinner === null) {
-                    //     var target = document.getElementById('videoremote'+remoteFeed.rfindex);
-                    //     remoteFeed.spinner = new Spinner({top:100}).spin(target);
-                    // } else {
-                    //     remoteFeed.spinner.spin();
-                    // }
-                    // Janus.log("Successfully attached to feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") in room " + msg["room"]);
-                    // $('#remote'+remoteFeed.rfindex).removeClass('hide').html(remoteFeed.rfdisplay).show();
-                } else if(event === "event") {
-                    // Check if we got an event on a simulcast-related event from this publisher
-                    // var substream = msg["substream"];
-                    // var temporal = msg["temporal"];
-                    // if((substream !== null && substream !== undefined) || (temporal !== null && temporal !== undefined)) {
-                    //     if(!remoteFeed.simulcastStarted) {
-                    //         remoteFeed.simulcastStarted = true;
-                    //         // Add some new buttons
-                    //         addSimulcastButtons(remoteFeed.rfindex, remoteFeed.videoCodec === "vp8" || remoteFeed.videoCodec === "h264");
-                    //     }
-                    //     // We just received notice that there's been a switch, update the buttons
-                    //     updateSimulcastButtons(remoteFeed.rfindex, substream, temporal);
-                    // }
-                } else {
-                    // What has just happened?
+                    console.log('hereherehere', msg["display"]);
                 }
             }
             if(jsep !== undefined && jsep !== null) {
@@ -775,7 +756,7 @@ function newRemoteFeed(id, display, audio, video) {
                         jsep: jsep,
                         // Add data:true here if you want to subscribe to datachannels as well
                         // (obviously only works if the publisher offered them in the first place)
-                        media: { audioSend: false, videoSend: false },	// We want recvonly audio/video
+                        media: { audioSend: false, videoSend: false, data: true },	// We want recvonly audio/video
                         success: function(jsep) {
                             Janus.debug("Got SDP!");
                             Janus.debug(jsep);
@@ -798,81 +779,100 @@ function newRemoteFeed(id, display, audio, video) {
         onremotestream: function(stream) {
             Janus.debug("Remote feed #" + remoteFeed.rfindex);
             console.log('start', remoteFeed);
-            // if($('#'+remoteFeed.rfdisplay).length === 0) {
-            //     // Show the video, hide the spinner and show the resolution when we get a playing event
-            //     $('#'+remoteFeed.rfdisplay).bind("playing", function () {
-            //         if(remoteFeed.spinner !== undefined && remoteFeed.spinner !== null)
-            //             remoteFeed.spinner.stop();
-            //         remoteFeed.spinner = null;
-            //         $('#waitingvideo'+remoteFeed.rfindex).remove();
-            //         if(this.videoWidth)
-            //             $('#remotevideo'+remoteFeed.rfindex).removeClass('hide').show();
-            //         var width = this.videoWidth;
-            //         var height = this.videoHeight;
-            //         $('#curres'+remoteFeed.rfindex).removeClass('hide').text(width+'x'+height).show();
-            //         if(Janus.webRTCAdapter.browserDetails.browser === "firefox") {
-            //             // Firefox Stable has a bug: width and height are not immediately available after a playing
-            //             setTimeout(function() {
-            //                 var width = $("#remotevideo"+remoteFeed.rfindex).get(0).videoWidth;
-            //                 var height = $("#remotevideo"+remoteFeed.rfindex).get(0).videoHeight;
-            //                 $('#curres'+remoteFeed.rfindex).removeClass('hide').text(width+'x'+height).show();
-            //             }, 2000);
-            //         }
-            //     });
-            // }
             Janus.attachMediaStream($('#'+remoteFeed.rfdisplay).get(0), stream);
-            //var videoTracks = stream.getVideoTracks();
-            // if(videoTracks === null || videoTracks === undefined || videoTracks.length === 0) {
-            //     // No remote video
-            //     $('#remotevideo'+remoteFeed.rfindex).hide();
-            //     if($('#videoremote'+remoteFeed.rfindex + ' .no-video-container').length === 0) {
-            //         $('#videoremote'+remoteFeed.rfindex).append(
-            //             '<div class="no-video-container">' +
-            //                 '<i class="fa fa-video-camera fa-5 no-video-icon"></i>' +
-            //                 '<span class="no-video-text">No remote video available</span>' +
-            //             '</div>');
-            //     }
-            // } else {
-            //     $('#videoremote'+remoteFeed.rfindex+ ' .no-video-container').remove();
-            //     $('#remotevideo'+remoteFeed.rfindex).removeClass('hide').show();
-            // }
-            // if(!addButtons)
-            //     return;
-            // if(Janus.webRTCAdapter.browserDetails.browser === "chrome" || Janus.webRTCAdapter.browserDetails.browser === "firefox" ||
-            //         Janus.webRTCAdapter.browserDetails.browser === "safari") {
-            //     $('#curbitrate'+remoteFeed.rfindex).removeClass('hide').show();
-            //     bitrateTimer[remoteFeed.rfindex] = setInterval(function() {
-            //         // Display updated bitrate, if supported
-            //         var bitrate = remoteFeed.getBitrate();
-            //         $('#curbitrate'+remoteFeed.rfindex).text(bitrate);
-            //         // Check if the resolution changed too
-            //         var width = $("#remotevideo"+remoteFeed.rfindex).get(0).videoWidth;
-            //         var height = $("#remotevideo"+remoteFeed.rfindex).get(0).videoHeight;
-            //         if(width > 0 && height > 0)
-            //             $('#curres'+remoteFeed.rfindex).removeClass('hide').text(width+'x'+height).show();
-            //     }, 1000);
-            // }
-        },
-        oncleanup: function() {
-            // Janus.log(" ::: Got a cleanup notification (remote feed " + id + ") :::");
-            // if(remoteFeed.spinner !== undefined && remoteFeed.spinner !== null)
-            //     remoteFeed.spinner.stop();
-            // remoteFeed.spinner = null;
-            // $('#remotevideo'+remoteFeed.rfindex).remove();
-            // $('#waitingvideo'+remoteFeed.rfindex).remove();
-            // $('#novideo'+remoteFeed.rfindex).remove();
-            // $('#curbitrate'+remoteFeed.rfindex).remove();
-            // $('#curres'+remoteFeed.rfindex).remove();
-            // if(bitrateTimer[remoteFeed.rfindex] !== null && bitrateTimer[remoteFeed.rfindex] !== null)
-            //     clearInterval(bitrateTimer[remoteFeed.rfindex]);
-            // bitrateTimer[remoteFeed.rfindex] = null;
-            // remoteFeed.simulcastStarted = false;
-            // $('#simulcast'+remoteFeed.rfindex).remove();
         }
     });
 }
 
 </script>
+@if ( $usertype == 'moderator' ) 
+<script>
+
+function kick( who )
+{
+    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+
+    $.ajax({
+        type:'POST',
+        url:"{{ route('getadminkey') }}",
+        data:{ roomId: roomId },
+        success: function( secretKey ){
+            swal({
+			  title: "Are you sure?",
+			  text: "You are going to kick a debator.",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((confirmKick) => {
+			  if (confirmKick) {
+                for( var i = 0; i < feeds.length; i ++ ) {
+                    if ( feeds[i] && feeds[i].rfdisplay == "debator_" + who )
+                    {
+                        console.log('kick debator_' + who);
+                        var kick = { "request": "kick", "secret": secretKey, "room": parseInt(roomId), "id": feeds[i].rfid };
+                        sfutest.send({ "message": kick });
+                        
+                        $.ajax({
+                            type:'POST',
+                            url:"{{ route('kick') }}",
+                            data:{ roomId: roomId, who: who },
+                            success: function( data )
+                            {
+                                if( data == 'success' )
+                                    swal("Debator kicked.", { icon: "success", });
+                                else
+                                    swal("Debator kick failed.", { icon: "warning", });
+                            }
+                        });
+                        feeds.splice( i, 1 );
+                        break;
+                    }
+                }
+			  }
+			});
+        }
+    });
+}
+
+function mute( who )
+{
+    swal({
+        title: "Are you sure?",
+        text: "You are going to mute a debator.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((confirmMute) => {
+        if ( confirmMute ) {
+            sfutest.data({
+                text: '{ "msgCode": "mute", "msgData": "' + who + '"}',
+                error: function(reason) { toastr.warning(reason); },
+                success: function() { swal("Operation Done.", { icon: "success", }); },
+            });
+        }
+    });
+}
+
+function timelimit( who )
+{
+    swal({
+        text: 'Input the time limit in seconds.',
+        content: "input",
+        button: {
+            text: "OK",
+            closeModal: true,
+        },
+    })
+    .then(seconds => {
+        console.log(seconds);
+    
+    })
+}
+
+</script>
+@endif
 
 </body>
 </html>

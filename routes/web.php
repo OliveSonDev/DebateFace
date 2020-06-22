@@ -27,6 +27,14 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get('/debate/{id}', 'DebateController@debate')->name('debate');
 Route::get('/debate/{id}/{password}', 'DebateController@debate')->name('debate');
 
+// Get User Name of Debator
 Route::post('/getusername', 'DebateController@getUserName')->name('getusername');
 
+//Check role and Watch / Join
 Route::post('/goforjoin', 'DebateController@goForJoin')->name('goforjoin');
+
+// Get Admin Key
+Route::post('/getadminkey', 'DebateController@getAdminKey')->name('getadminkey');
+
+// Remove debator ID in a debate
+Route::post('/kick', 'DebateController@kickDebator')->name('kick');

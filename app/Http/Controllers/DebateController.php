@@ -61,9 +61,9 @@ class DebateController extends Controller
             'adminkey' => $this->generateRandomString(10),
             'password' => $request['password'] != NULL ? $request['password'] : '',
             'rule' => $request['rule'] != NULL ? $request['rule'] : '',
-            'debator' => Auth::user()->id,
-            'moderator_one' => $request['moderator_one'] != NULL ? $request['moderator_one'] : '',
-            'moderator_two' => $request['moderator_two'] != NULL ? $request['moderator_two'] : ''
+            'moderator' => Auth::user()->id,
+            'debator_one' => $request['debator_one'] != NULL ? $request['debator_one'] : '',
+            'debator_two' => $request['debator_two'] != NULL ? $request['debator_two'] : ''
         ]);
 
         $debate->save();
@@ -78,25 +78,27 @@ class DebateController extends Controller
     /**
      * Show a debate
      */
-    public function debate($id, $password = NULL)
+    public function debate($id, $pass = NULL)
     {
         if( $id == NULL || $id == '' )
             return view('debate.error')->with('error', 'Wrong Input...');
+
+        $password = $pass == NULL ? NULL : base64_decode($pass);
         
         $debate = Debate::where('id', $id)->first();
 
         if( $debate == NULL )
             return view('debate.error')->with('error', 'Cannot find debate...');
 
-        if( $debate->password != $password )
+        if( $debate->type == 1 && $debate->password != $password )
             return view('debate.error')->with('error', 'Password does not match...');
 
-        if( $debate->debator == Auth::user()->id )
-            $usertype = 'debator';
-        else if( $debate->moderator_one == Auth::user()->email )
-            $usertype = 'moderator_one';
-        else if( $debate->moderator_two == Auth::user()->email )
-            $usertype = 'moderator_two';
+        if( $debate->moderator == Auth::user()->id )
+            $usertype = 'moderator';
+        else if( $debate->debator_one == Auth::user()->email )
+            $usertype = 'debator_one';
+        else if( $debate->debator_two == Auth::user()->email )
+            $usertype = 'debator_two';
         else
             $usertype = 'subscriber';
 
@@ -108,7 +110,7 @@ class DebateController extends Controller
     }
 
     /**
-     * Return a username of a moderator in a debate
+     * Return a username of a debator in a debate
      */
 
     public function getUserName(Request $request)
@@ -121,7 +123,7 @@ class DebateController extends Controller
         if( $debate == NULL )
             return response()->json(['']);
         
-        $email = ($request['type'] == 'one' ? $debate->moderator_one : $debate->moderator_two);
+        $email = ($request['type'] == 'one' ? $debate->debator_one : $debate->debator_two);
 
         if( $email == NULL )
             return response()->json(['']);
@@ -144,38 +146,70 @@ class DebateController extends Controller
             if( $request['watchPassword'] == NULL )
                 return redirect('debate/'.$request['watchDebateId'] );
             else
-                return redirect('debate/'.$request['watchDebateId'].'/'.$request['watchPassword'] );
+                return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['joinPassword'] ) );
         }
         else if( $request['joinDebateId'] != NULL )
         {
             $debate = Debate::where('id', $request['joinDebateId'])->first();
             if( $debate != NULL )
             {
-                if( $debate->moderator_one != Auth::user()->email && $debate->moderator_two != Auth::user()->email )
+                if( $debate->password == $request['joinPassword'] && $debate->debator_one != Auth::user()->email && $debate->debator_two != Auth::user()->email )
                 {
-                    if( $debate->moderator_one == NULL )
+                    if( $debate->debator_one == NULL )
                     {
-                        $debate->moderator_one = Auth::user()->email;
+                        $debate->debator_one = Auth::user()->email;
                         $debate->save();
                     }
-                    else if( $debate->moderator_two == NULL )
+                    else if( $debate->debator_two == NULL )
                     {
-                        $debate->moderator_two = Auth::user()->email;
+                        $debate->debator_two = Auth::user()->email;
                         $debate->save();
                     }
                     else
-                        return view('debate.error')->with('error', 'Full of moderators...');
+                        return view('debate.error')->with('error', 'Full of debators...');
                 }
                 
                 if( $request['joinPassword'] == NULL )
                     return redirect('debate/'.$request['joinDebateId'] );
                 else
-                    return redirect('debate/'.$request['joinDebateId'].'/'.$request['joinPassword'] );
+                    return redirect('debate/'.$request['joinDebateId'].'/'.base64_encode( $request['joinPassword'] ) );
             }
             else
                 return view('debate.error')->with('error', 'No such debate...');
         }
         else
             return redirect('join');
+    }
+
+    /**
+     * Get Admin Key
+     */
+    public function getAdminKey(Request $request)
+    {
+        $debate = Debate::where('id', $request['roomId'])->first();
+        if( $debate != NULL && $debate->moderator == Auth::user()->id )
+            return response()->json( $debate->adminkey );
+        else
+            return response()->json( '' );
+    }
+
+    /**
+     * Attache 'kicked' text to email of debator in a debate
+     */
+    public function kickDebator(Request $request)
+    {
+        $debate = Debate::where('id', $request['roomId'])->first();
+        if( $debate != NULL && $debate->moderator == Auth::user()->id )
+        {
+            if( $request['who'] == 'one' )
+                $debate->debator_one = $debate->debator_one.'kicked';
+            else if( $request['who'] == 'two' )
+                $debate->debator_one = $debate->debator_one.'kicked';
+            $debate->save();
+
+            return response()->json( 'success' );
+        }    
+        else
+            return response()->json( 'fail' );
     }
 }

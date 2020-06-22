@@ -80,11 +80,11 @@
                             <label for="invite" class="col-md-5 col-form-label text-md-right">{{ __('Invite User 1 email :') }}</label>
 
                             <div class="col-md-6">
-                                <input id="moderator_one" type="text" placeholder = "{{ __('Moderator Email') }}" class="form-control{{ $errors->has('moderator_one') ? ' is-invalid' : '' }}" name="moderator_one" >
+                                <input id="debator_one" type="text" placeholder = "{{ __('debator Email') }}" class="form-control{{ $errors->has('debator_one') ? ' is-invalid' : '' }}" name="debator_one" >
 
-                                @if ($errors->has('moderator_one'))
+                                @if ($errors->has('debator_one'))
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('moderator_one') }}</strong>
+                                        <strong>{{ $errors->first('debator_one') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -94,11 +94,11 @@
                             <label for="invite" class="col-md-5 col-form-label text-md-right">{{ __('Invite User 2 email :') }}</label>
 
                             <div class="col-md-6">
-                                <input id="moderator_two" type="text" placeholder = "{{ __('Moderator Email') }}" class="form-control{{ $errors->has('moderator_two') ? ' is-invalid' : '' }}" name="moderator_two" >
+                                <input id="debator_two" type="text" placeholder = "{{ __('debator Email') }}" class="form-control{{ $errors->has('debator_two') ? ' is-invalid' : '' }}" name="debator_two" >
 
-                                @if ($errors->has('moderator_two'))
+                                @if ($errors->has('debator_two'))
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('moderator_two') }}</strong>
+                                        <strong>{{ $errors->first('debator_two') }}</strong>
                                     </span>
                                 @endif
                             </div>
