@@ -235,7 +235,7 @@
                                 </div>
                                 <div class = "text-center"> {{ $debate->one_sharp }} </div>
                             </div>
-                            <div class = "text-center text-middle"> <h4> Time Left: 2:00 </h4> </div>
+                            <div class = "text-center text-middle"> <h4 id = "one_timelimit"> Time Left: Unlimited </h4> </div>
                         </div>
                     </div>
                     <div class = "col-md-4">
@@ -264,7 +264,7 @@
                                 </div>
                                 <div class = "text-center"> {{ $debate->two_sharp }} </div>
                             </div>
-                            <div class = "text-center text-middle"> <h4> Time Left: 2:00 </h4> </div>
+                            <div class = "text-center text-middle"> <h4 id = "two_timelimit"> Time Left: Unlimited </h4> </div>
                         </div>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
                         </div>
                         <div class = "modStatusContainer mt-1">
                             <div> <h4 id = "username_one"> User: <h4> </div>
-                            <div> <h4> Time left: 1.47 </h4> </div>
+                            <div> <h4 id = "one_timelimit"> Time left: Unlimited </h4> </div>
                         </div>
                     </div>
                     <div class="col-md-4" >
@@ -294,7 +294,7 @@
                         </div>
                         <div class = "modStatusContainer mt-1">
                             <div> <h4 id = "username_two"> User: <h4> </div>
-                            <div> <h4> Time left: 1.47 </h4> </div>
+                            <div> <h4 id = "two_timelimit"> Time left: Unlimited </h4> </div>
                         </div>
                     </div>
                 </div>
@@ -429,6 +429,8 @@ else
     usertype = 'subscriber';
 
 $(document).ready(function() {
+    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+
     Janus.init({debug: "all", callback: function() {
         janus = new Janus({
             server: server,
@@ -656,8 +658,6 @@ function publishOwnFeed(useAudio) {
 
 function setUserName( usertype )
 {
-    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
-
     $.ajax({
         type:'POST',
         url:"{{ route('getusername') }}",
@@ -668,6 +668,8 @@ function setUserName( usertype )
         }
     });
 }
+
+var publishStopper;
 
 function newRemoteFeed(id, display, audio, video) {
 	console.log(id, display);
@@ -722,6 +724,21 @@ function newRemoteFeed(id, display, audio, video) {
                             sfutest.unmuteAudio();
                         else
                             sfutest.muteAudio();
+                    }
+                    break;
+                case 'timelimit':
+                    setupTimeLimit(data.msgData, data.limit);
+                    if( data.msgData == username )
+                    {
+                        toastr.warning('Timer set as ' + data.limit + ' seconds');
+                        if( publishStopper )
+                            clearTimeout(publishStopper);
+                        if( data.limit > 0 )
+                            publishStopper = setTimeout(function(){ 
+                                var unpublish = { "request": "unpublish" };
+	                            sfutest.send({"message": unpublish});
+                                toastr.warning('Time is out...');
+                             }, data.limit * 1000);
                     }
                     break;
             }
@@ -784,14 +801,56 @@ function newRemoteFeed(id, display, audio, video) {
     });
 }
 
+function fancyTimeFormat(time)
+{   
+    // Hours, minutes and seconds
+    var mins = ~~(time / 60);
+    var secs = ~~time % 60;
+
+    var ret = "";
+
+    ret += (mins < 10 ? "0" : "");
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+}
+
+var timerOne, timerTwo;
+
+function setupTimeLimit( who, limit )
+{
+    if( limit > 0)
+    {
+        var seconds = limit;
+        if( who == 'debator_one')
+        {
+            if( timerOne ) clearInterval( timerOne );
+            timerOne = setInterval(function(){
+                seconds --;
+                $('#one_timelimit')[0].innerHTML = 'Time left: ' + fancyTimeFormat( seconds );
+                if( seconds <= 0)
+                    clearInterval( timerOne );
+            }, 1000);
+        }
+        else if( who == 'debator_two')
+        {
+            if( timerTwo ) clearInterval( timerTwo );
+            timerTwo = setInterval(function(){
+                seconds --;
+                $('#two_timelimit')[0].innerHTML = 'Time left: ' + fancyTimeFormat( seconds );
+                if( seconds <= 0)
+                    clearInterval( timerTwo );
+            }, 1000);
+        }
+    }
+}
+
 </script>
 @if ( $usertype == 'moderator' ) 
 <script>
 
 function kick( who )
 {
-    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
-
     $.ajax({
         type:'POST',
         url:"{{ route('getadminkey') }}",
@@ -867,7 +926,28 @@ function timelimit( who )
     })
     .then(seconds => {
         console.log(seconds);
-    
+        if( seconds != null && seconds != undefined && !isNaN(seconds) )
+        {
+            $.ajax({
+                type:'POST',
+                url:"{{ route('timelimit') }}",
+                data:{ roomId: roomId, who: who, limit: seconds },
+                success: function( data )
+                {
+                    if( data == 'success' )
+                    {
+                        sfutest.data({
+                            text: '{ "msgCode": "timelimit", "msgData": "debator_' + who + '", "limit":' + seconds + '}',
+                            error: function(reason) { toastr.warning(reason); },
+                            success: function() { swal("Timer set success.", { icon: "success", }); },
+                        });
+                        setupTimeLimit("debator_" + who, seconds);
+                    }    
+                    else
+                        swal("Timer set failed.", { icon: "warning", });
+                }
+            });
+        }
     })
 }
 

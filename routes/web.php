@@ -38,3 +38,6 @@ Route::post('/getadminkey', 'DebateController@getAdminKey')->name('getadminkey')
 
 // Remove debator ID in a debate
 Route::post('/kick', 'DebateController@kickDebator')->name('kick');
+
+// Save timelimit value for a debator 
+Route::post('/timelimit', 'DebateController@saveTimer')->name('timelimit');

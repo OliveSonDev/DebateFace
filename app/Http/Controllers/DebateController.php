@@ -194,7 +194,7 @@ class DebateController extends Controller
     }
 
     /**
-     * Attache 'kicked' text to email of debator in a debate
+     * Attach 'kicked' text to email of debator in a debate
      */
     public function kickDebator(Request $request)
     {
@@ -205,6 +205,26 @@ class DebateController extends Controller
                 $debate->debator_one = $debate->debator_one.'kicked';
             else if( $request['who'] == 'two' )
                 $debate->debator_one = $debate->debator_one.'kicked';
+            $debate->save();
+
+            return response()->json( 'success' );
+        }    
+        else
+            return response()->json( 'fail' );
+    }
+
+    /**
+     * Save Timelimit value to debator
+     */
+    public function saveTimer(Request $request)
+    {
+        $debate = Debate::where('id', $request['roomId'])->first();
+        if( $debate != NULL && $debate->moderator == Auth::user()->id )
+        {
+            if( $request['who'] == 'one' )
+                $debate->one_timelimit = $request['limit'] * 1000;
+            else if( $request['who'] == 'two' )
+                $debate->two_timelimit = $request['limit'] * 1000;
             $debate->save();
 
             return response()->json( 'success' );
