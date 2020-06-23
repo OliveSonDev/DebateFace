@@ -422,14 +422,58 @@ var mystream = null;
 var mypvtid = null;
 
 var feeds = [];
+var one_timelimit = "{{ $one_timelimit }}";
+var two_timelimit = "{{ $two_timelimit }}";
 
 if( username == 'moderator' || username == 'debator_one' || username == 'debator_two' )
     usertype = 'publisher';
 else
     usertype = 'subscriber';
 
+var publishStopper;
+
 $(document).ready(function() {
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+
+    if( one_timelimit == 'unlimited' )
+        $('#one_timelimit')[0].innerHTML = 'Time left: Unlimited';
+    else if( one_timelimit == 0 )
+        $('#one_timelimit')[0].innerHTML = 'Time left: 00:00';
+    else if( one_timelimit > 0 )
+    {
+        setupTimeLimit('debator_one', one_timelimit);
+        if( username == 'debator_one' )
+        {
+            toastr.warning('You have ' + one_timelimit + ' seconds to debate');
+            if( publishStopper )
+                clearTimeout(publishStopper);
+            publishStopper = setTimeout(function(){ 
+                var unpublish = { "request": "unpublish" };
+                sfutest.send({"message": unpublish});
+                toastr.warning('Time is out...');
+                }, one_timelimit * 1000);
+        }
+    }
+
+    if( two_timelimit == 'unlimited' )
+        $('#two_timelimit')[0].innerHTML = 'Time left: Unlimited';
+    else if( one_timelimit == 0 )
+        $('#two_timelimit')[0].innerHTML = 'Time left: 00:00';
+    else if( two_timelimit > 0 )
+    {
+        setupTimeLimit('debator_two', two_timelimit);
+        if( username == 'debator_two' )
+        {
+            toastr.warning('You have ' + two_timelimit + ' seconds to debate');
+            if( publishStopper )
+                clearTimeout(publishStopper);
+            publishStopper = setTimeout(function(){ 
+                var unpublish = { "request": "unpublish" };
+                sfutest.send({"message": unpublish});
+                toastr.warning('Time is out...');
+                }, two_timelimit * 1000);
+        }
+    }
 
     Janus.init({debug: "all", callback: function() {
         janus = new Janus({
@@ -635,25 +679,28 @@ $(document).ready(function() {
 
 function publishOwnFeed(useAudio) {
 	// Publish our stream
-	sfutest.createOffer(
-    {
-        media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true, data: true },	// Publishers are sendonly
-        success: function(jsep) {
-            Janus.debug("Got publisher SDP!");
-            Janus.debug(jsep);
-            var publish = { "request": "configure", "audio": useAudio, "video": true, "pin": "{{ $pin }}" };
-            sfutest.send({"message": publish, "jsep": jsep});
-        },
-        error: function(error) {
-            Janus.error("WebRTC error:", error);
-            if (useAudio) {
-                    publishOwnFeed(false);
-            } else {
-                bootbox.alert("WebRTC error... " + JSON.stringify(error));
-                $('#publish').removeAttr('disabled').click(function() { publishOwnFeed(true); });
+    if( username == 'moderator' 
+    || (username == 'debator_one' && ( one_timelimit == 'unlimited' || one_timelimit > 0 ) ) 
+    || (username == 'debator_two' && ( two_timelimit == 'unlimited' || two_timelimit > 0 ) ) )
+        sfutest.createOffer(
+        {
+            media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true, data: true },	// Publishers are sendonly
+            success: function(jsep) {
+                Janus.debug("Got publisher SDP!");
+                Janus.debug(jsep);
+                var publish = { "request": "configure", "audio": useAudio, "video": true, "pin": "{{ $pin }}" };
+                sfutest.send({"message": publish, "jsep": jsep});
+            },
+            error: function(error) {
+                Janus.error("WebRTC error:", error);
+                if (useAudio) {
+                        publishOwnFeed(false);
+                } else {
+                    bootbox.alert("WebRTC error... " + JSON.stringify(error));
+                    $('#publish').removeAttr('disabled').click(function() { publishOwnFeed(true); });
+                }
             }
-        }
-    });
+        });
 }
 
 function setUserName( usertype )
@@ -668,8 +715,6 @@ function setUserName( usertype )
         }
     });
 }
-
-var publishStopper;
 
 function newRemoteFeed(id, display, audio, video) {
 	console.log(id, display);

@@ -102,11 +102,16 @@ class DebateController extends Controller
         else
             $usertype = 'subscriber';
 
+        $one_timelimit = (int)$debate->one_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->one_timelimit ? $debate->one_timelimit - (int)time(): 0);
+        $two_timelimit = (int)$debate->two_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->two_timelimit ? $debate->two_timelimit - (int)time() : 0);
+
         return view('debate.show')
                ->with('debate', $debate)
                ->with('usertype', $usertype)
                ->with('roomId', $id)
-               ->with('pin', $password);
+               ->with('pin', $password)
+               ->with('one_timelimit', $one_timelimit)
+               ->with('two_timelimit', $two_timelimit);
     }
 
     /**
@@ -222,9 +227,9 @@ class DebateController extends Controller
         if( $debate != NULL && $debate->moderator == Auth::user()->id )
         {
             if( $request['who'] == 'one' )
-                $debate->one_timelimit = $request['limit'] * 1000;
+                $debate->one_timelimit = (int)time() + $request['limit'] ;
             else if( $request['who'] == 'two' )
-                $debate->two_timelimit = $request['limit'] * 1000;
+                $debate->two_timelimit = (int)time() + $request['limit'] ;
             $debate->save();
 
             return response()->json( 'success' );
