@@ -151,7 +151,7 @@ class DebateController extends Controller
             if( $request['watchPassword'] == NULL )
                 return redirect('debate/'.$request['watchDebateId'] );
             else
-                return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['joinPassword'] ) );
+                return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['watchPassword'] ) );
         }
         else if( $request['joinDebateId'] != NULL )
         {

@@ -212,7 +212,7 @@
                     <div class = "col-md-4 offset-md-2">
                         <div class="modStatusContainer mt-2">
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')">
                                     <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                 </div>
                                 <div class = "text-center"> {{ $debate->one_upvote }} </div>
@@ -303,7 +303,7 @@
                         <div class = "modCtrlDiv">
                             <div class = "modStatusContainer">
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')" >
                                         <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                     </div>
                                     <div class = "text-center"> {{ $debate->one_upvote }} </div>
@@ -425,6 +425,8 @@ var feeds = [];
 var one_timelimit = "{{ $one_timelimit }}";
 var two_timelimit = "{{ $two_timelimit }}";
 
+var allmembers = [];
+
 if( username == 'moderator' || username == 'debator_one' || username == 'debator_two' )
     usertype = 'publisher';
 else
@@ -438,7 +440,11 @@ $(document).ready(function() {
     if( one_timelimit == 'unlimited' )
         $('#one_timelimit')[0].innerHTML = 'Time left: Unlimited';
     else if( one_timelimit == 0 )
+    {
         $('#one_timelimit')[0].innerHTML = 'Time left: 00:00';
+        if( username == 'debator_one' )
+            toastr.warning('Time is out...');
+    }    
     else if( one_timelimit > 0 )
     {
         setupTimeLimit('debator_one', one_timelimit);
@@ -458,7 +464,11 @@ $(document).ready(function() {
     if( two_timelimit == 'unlimited' )
         $('#two_timelimit')[0].innerHTML = 'Time left: Unlimited';
     else if( one_timelimit == 0 )
+    {
         $('#two_timelimit')[0].innerHTML = 'Time left: 00:00';
+        if( username == 'debator_two' )
+            toastr.warning('Time is out...');
+    }    
     else if( two_timelimit > 0 )
     {
         setupTimeLimit('debator_two', two_timelimit);
@@ -512,6 +522,8 @@ $(document).ready(function() {
                                 Janus.log("Successfully joined room " + msg["room"] + " with ID " + myid);
                                 if ( usertype == "publisher" )
                                     publishOwnFeed(true);
+                                else
+                                    createDataChannel();
                                 // Any new feed to attach to?
                                 if(msg["publishers"] !== undefined && msg["publishers"] !== null) {
                                     var list = msg["publishers"];
@@ -519,6 +531,11 @@ $(document).ready(function() {
                                     Janus.debug(list);
                                     console.log(list);
                                     for(var f in list) {
+                                        if( username == 'moderator' && allmembers.indexOf( list[f]['id'] ) == -1 )
+                                        {
+                                            allmembers.push( list[f]['id'] );
+                                            listenNewMember( list[f]['id'] );
+                                        }
                                         if( list[f]["display"] != "subscriber" )
                                         {
                                             var id = list[f]["id"];
@@ -550,6 +567,11 @@ $(document).ready(function() {
                                     Janus.debug(list);
                                     console.log(list);
                                     for(var f in list) {
+                                        if( username == 'moderator' && allmembers.indexOf( list[f]['id'] ) == -1 )
+                                        {
+                                            allmembers.push( list[f]['id'] );
+                                            listenNewMember( list[f]['id'] );
+                                        }
                                         if( list[f]["display"] != "subscriber" )
                                         {
                                             var id = list[f]["id"];
@@ -701,6 +723,22 @@ function publishOwnFeed(useAudio) {
                 }
             }
         });
+    else if( username == 'debator_one' || username == 'debator_two')
+        createDataChannel();
+}
+
+function createDataChannel() {
+    sfutest.createOffer(
+    {
+        media: { audioRecv: false, videoRecv: false, audioSend: false, videoSend: false, data: true },
+         success: function(jsep) {
+             var publish = { "request": "configure", "audio": false, "video": false, "pin": "{{ $pin }}" };
+             sfutest.send({"message": publish, "jsep": jsep});
+         },
+         error: function(error) {
+             Janus.error("WebRTC error:", error);
+        }
+    });
 }
 
 function setUserName( usertype )
@@ -805,7 +843,6 @@ function newRemoteFeed(id, display, audio, video) {
                         checkFeed[0] = remoteFeed;
                     else
                         feeds.push(remoteFeed);
-                    console.log('hereherehere', msg["display"]);
                 }
             }
             if(jsep !== undefined && jsep !== null) {
@@ -890,6 +927,15 @@ function setupTimeLimit( who, limit )
     }
 }
 
+function feeling( type )
+{
+    sfutest.data({
+        text: '{ "msgCode": "feeling", "msgData": "' + type + '"}',
+        error: function(reason) { toastr.warning(reason); },
+        success: function() { toastr.success("Operation Done."); },
+    });
+}
+
 </script>
 @if ( $usertype == 'moderator' ) 
 <script>
@@ -953,7 +999,7 @@ function mute( who )
             sfutest.data({
                 text: '{ "msgCode": "mute", "msgData": "' + who + '"}',
                 error: function(reason) { toastr.warning(reason); },
-                success: function() { swal("Operation Done.", { icon: "success", }); },
+                success: function() { toastr.success("Operation Done."); },
             });
         }
     });
@@ -994,6 +1040,54 @@ function timelimit( who )
             });
         }
     })
+}
+
+function listenNewMember( id )
+{
+    var remoteFeed = null;
+    janus.attach(
+    {
+        plugin: "janus.plugin.videoroom",
+        opaqueId: opaqueId,
+        success: function(pluginHandle) {
+            remoteFeed = pluginHandle;
+            remoteFeed.simulcastStarted = false;
+            var subscribe = { "request": "join", "room": parseInt(roomId), "ptype": "subscriber", "feed": id, "private_id": mypvtid , "pin": "{{ $pin }}"};
+            remoteFeed.send({"message": subscribe});
+        },
+        error: function(error) {
+            Janus.error("  -- Error attaching plugin...", error);
+            bootbox.alert("Error attaching plugin... " + error);
+        },
+        ondata: function( response ) {
+            var data = JSON.parse(response);
+            switch ( data.msgCode )
+            {
+                
+            }
+        },
+        onmessage: function(msg, jsep) {
+            if(jsep !== undefined && jsep !== null) {
+                Janus.debug("Handling SDP as well...");
+                Janus.debug(jsep);
+                console.log('jsep', jsep);
+                // Answer and attach
+                remoteFeed.createAnswer(
+                    {
+                        jsep: jsep,
+                        media: { audioRecv: false, videoRecv: false, audioSend: false, videoSend: false, data: true },	// We want recvonly audio/video
+                        success: function(jsep) {
+                            var body = { "request": "start", "room": parseInt(roomId) };
+                            remoteFeed.send({"message": body, "jsep": jsep});
+                        },
+                        error: function(error) {
+                            Janus.error("WebRTC error:", error);
+                            bootbox.alert("WebRTC error... " + JSON.stringify(error));
+                        }
+                    });
+            }
+        }
+    });
 }
 
 </script>
