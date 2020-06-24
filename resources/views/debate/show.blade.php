@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Please wait...</title>
+<title> DebateFace.com </title>
 
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -372,31 +372,27 @@
                     </div>
                 </div>
             @endif
-            <div class = "row mt-4">
-                <div class = "col-md-2 text-right">
-                    <img src = "{{ asset('img/avatar.png') }}" alt = "commentAvatar" class = "commentAvatar">
+            <div class = "commentsPane mt-5" id = "commentsPanel">
+                @foreach ($comments as $comment)
+                <div class = "row mt-2">
+                    <div class = "col-md-2 text-right">
+                        {{ $comment->username }}
+                    </div>
+                    <div class = "col-md-8 pb-2 commentDivider">
+                        <div class = "commentText"> {{ $comment->text }} </div>
+                    </div>
                 </div>
-                <div class = "col-md-8">
-                    <div class = "commentText"> User 1 Commented </div>
-                </div>
+                @endforeach
             </div>
-            <div class = "row">
-                <div class = "col-md-2 text-right">
-                    <img src = "{{ asset('img/avatar.png') }}" alt = "commentAvatar" class = "commentAvatar">
-                </div>
-                <div class = "col-md-8">
-                    <div class = "commentText"> User 2 Commented </div>
-                </div>
-            </div>
-            <div class = "row">
+            <div class = "row mt-5">
                 <div class = "col-md-2 text-right">
                     Your Comment
                 </div>
                 <div class = "col-md-8">
-                    <textarea class = "myCommentText">  </textarea>
+                    <textarea class = "myCommentText" id = "myComment">  </textarea>
                 </div>
                 <div class = "col-md-2 text-left">
-                    <button class = "doCommentBtn">Send Comment</button>
+                    <button class = "doCommentBtn" onclick = "comment()">Send Comment</button>
                 </div>
             </div>
         </div>
@@ -481,7 +477,7 @@ $(document).ready(function() {
                 var unpublish = { "request": "unpublish" };
                 sfutest.send({"message": unpublish});
                 toastr.warning('Time is out...');
-                }, two_timelimit * 1000);
+            }, two_timelimit * 1000);
         }
     }
 
@@ -796,7 +792,7 @@ function newRemoteFeed(id, display, audio, video) {
             bootbox.alert("Error attaching plugin... " + error);
         },
         ondata: function( response ) {
-            var data = JSON.parse(response);
+            var data = JSON.parse( response.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t") );
             switch ( data.msgCode )
             {
                 case 'mute':
@@ -826,6 +822,9 @@ function newRemoteFeed(id, display, audio, video) {
                     break;
                 case 'addfeeling':
                     addfeeling( data.msgData );
+                    break;
+                case 'addcomment':
+                    addComment( data.username, data.text );
                     break;
             }
         },
@@ -965,6 +964,56 @@ function feeling( type )
     }
 }
 
+function addComment( username, text )
+{
+    var comment = document.createElement("div");
+    comment.className = "row mt-2";
+    
+    var usernamePane = document.createElement("div");
+    usernamePane.className = "col-md-2 text-right";
+    usernamePane.innerHTML = username;
+    
+    var commentPane = document.createElement("div");
+    commentPane.className = "col-md-8 pb-2 commentDivider";
+    
+    var commentText = document.createElement("div");
+    commentText.className = "commentText";
+    commentText.innerHTML = text;
+    commentPane.appendChild( commentText );
+
+    comment.appendChild( usernamePane );
+    comment.appendChild( commentPane );
+
+    document.getElementById('commentsPanel').appendChild( comment );
+}
+
+function comment(){
+    var text = $("#myComment").val();
+
+    $.ajax({
+        type:'POST',
+        url:"{{ route('comment') }}",
+        data:{ roomId: roomId, text: text },
+        success: function( name ){
+            if( username != 'moderator' )
+                sfutest.data({
+                    text: '{ "msgCode": "comment", "username": "' + name + '", "text": "' + text + '"}',
+                    error: function(reason) { toastr.warning(reason); },
+                    success: function() { toastr.success("Operation Done."); },
+                });
+            else {
+                sfutest.data({
+                    text: '{ "msgCode": "addcomment", "username": "Moderator", "text": "' + text + '"}',
+                    error: function(reason) { toastr.warning(reason); },
+                    success: function() { toastr.success("Operation Done."); },
+                });
+                addComment( "Moderator", text );
+            }   
+    } });
+
+    $("#myComment").val('');
+}
+
 </script>
 @if ( $usertype == 'moderator' ) 
 <script>
@@ -1089,7 +1138,7 @@ function listenNewMember( id )
             bootbox.alert("Error attaching plugin... " + error);
         },
         ondata: function( response ) {
-            var data = JSON.parse(response);
+            var data = JSON.parse( response.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t") );
             switch ( data.msgCode )
             {
                 case 'feeling':
@@ -1101,7 +1150,12 @@ function listenNewMember( id )
                     addfeeling( data.msgData );
                     break;
                 case 'comment':
-
+                    sfutest.data({
+                        text: '{ "msgCode": "addcomment", "username": "' + data.username + '", "text": "' + data.text + '"}',
+                        error: function(reason) { toastr.warning(reason); },
+                        success: function() {  },
+                    });
+                    addComment( data.username, data.text );
                     break;
             }
         },

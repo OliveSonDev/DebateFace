@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\User;
 use App\Debate;
+use App\Comments;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
   
@@ -105,13 +106,16 @@ class DebateController extends Controller
         $one_timelimit = (int)$debate->one_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->one_timelimit ? $debate->one_timelimit - (int)time(): 0);
         $two_timelimit = (int)$debate->two_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->two_timelimit ? $debate->two_timelimit - (int)time() : 0);
 
+        $comments = Comments::where('debateid', $id)->get();
+
         return view('debate.show')
                ->with('debate', $debate)
                ->with('usertype', $usertype)
                ->with('roomId', $id)
                ->with('pin', $password)
                ->with('one_timelimit', $one_timelimit)
-               ->with('two_timelimit', $two_timelimit);
+               ->with('two_timelimit', $two_timelimit)
+               ->with('comments', $comments);
     }
 
     /**
@@ -269,5 +273,21 @@ class DebateController extends Controller
         }    
         else
             return response()->json( 'fail' );
+    }
+
+    /**
+     * Add a feeling for a debator in a debate
+     */
+    public function addComment(Request $request)
+    {
+        $comment = Comments::create([
+            'username' => Auth::user()->name,
+            'debateid' => $request['roomId'],
+            'text' => $request['text']
+        ]);
+
+        $comment->save();
+        
+        return response()->json( Auth::user()->name );
     }
 }
