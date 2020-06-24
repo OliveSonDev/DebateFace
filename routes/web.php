@@ -41,3 +41,6 @@ Route::post('/kick', 'DebateController@kickDebator')->name('kick');
 
 // Save timelimit value for a debator 
 Route::post('/timelimit', 'DebateController@saveTimer')->name('timelimit');
+
+// Add a feeling for a debator 
+Route::post('/feeling', 'DebateController@addFeeling')->name('feeling');

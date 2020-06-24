@@ -215,25 +215,25 @@
                                 <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')">
                                     <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                 </div>
-                                <div class = "text-center"> {{ $debate->one_upvote }} </div>
+                                <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
                             </div>
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
                                     <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                 </div>
-                                <div class = "text-center"> {{ $debate->one_downvote }} </div>
+                                <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
                             </div>
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
                                     <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                 </div>
-                                <div class = "text-center"> {{ $debate->one_heart }} </div>
+                                <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
                             </div>
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
                                     <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                 </div>
-                                <div class = "text-center"> {{ $debate->one_sharp }} </div>
+                                <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
                             </div>
                             <div class = "text-center text-middle"> <h4 id = "one_timelimit"> Time Left: Unlimited </h4> </div>
                         </div>
@@ -241,28 +241,28 @@
                     <div class = "col-md-4">
                         <div class="modStatusContainer mt-2">
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
                                     <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                 </div>
-                                <div class = "text-center"> {{ $debate->two_upvote }} </div>
+                                <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
                             </div>
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
                                     <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                 </div>
-                                <div class = "text-center"> {{ $debate->two_downvote }} </div>
+                                <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
                             </div>
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
                                     <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                 </div>
-                                <div class = "text-center"> {{ $debate->two_heart }} </div>
+                                <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
                             </div>
                             <div class = "text-center">
-                                <div class = "modStatusCtrl">
+                                <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
                                     <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                 </div>
-                                <div class = "text-center"> {{ $debate->two_sharp }} </div>
+                                <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
                             </div>
                             <div class = "text-center text-middle"> <h4 id = "two_timelimit"> Time Left: Unlimited </h4> </div>
                         </div>
@@ -306,25 +306,25 @@
                                     <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')" >
                                         <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->one_upvote }} </div>
+                                    <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
                                 </div>
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
                                         <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->one_downvote }} </div>
+                                    <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
                                 </div>
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
                                         <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->one_heart }} </div>
+                                    <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
                                 </div>
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
                                         <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->one_sharp }} </div>
+                                    <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
                                 </div>
                             </div>
                         </div>
@@ -344,28 +344,28 @@
                         <div class = "modCtrlDiv">
                             <div class = "modStatusContainer">
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
                                         <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->two_upvote }} </div>
+                                    <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
                                 </div>
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
                                         <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->two_downvote }} </div>
+                                    <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
                                 </div>
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
                                         <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->two_heart }} </div>
+                                    <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
                                 </div>
                                 <div class = "text-center">
-                                    <div class = "modStatusCtrl">
+                                    <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
                                         <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                     </div>
-                                    <div class = "text-center"> {{ $debate->two_sharp }} </div>
+                                    <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
                                 </div>
                             </div>
                         </div>
@@ -824,6 +824,9 @@ function newRemoteFeed(id, display, audio, video) {
                              }, data.limit * 1000);
                     }
                     break;
+                case 'addfeeling':
+                    addfeeling( data.msgData );
+                    break;
             }
         },
         onmessage: function(msg, jsep) {
@@ -927,13 +930,39 @@ function setupTimeLimit( who, limit )
     }
 }
 
+function addfeeling( type ) {
+    var count = parseInt( $("#" + type + '_display')[0].innerHTML );
+    count ++;
+    $("#" + type + '_display')[0].innerHTML = count;
+}
+
 function feeling( type )
 {
-    sfutest.data({
-        text: '{ "msgCode": "feeling", "msgData": "' + type + '"}',
-        error: function(reason) { toastr.warning(reason); },
-        success: function() { toastr.success("Operation Done."); },
-    });
+    $.ajax({
+        type:'POST',
+        url:"{{ route('feeling') }}",
+        data:{ roomId: roomId, type: type },
+        success: function( data ){
+            if( data == 'success' )
+                toastr.success("Operation Done.");
+            else
+                toastr.success("Something wrong...");
+    } });
+
+    if( username != 'moderator' )
+        sfutest.data({
+            text: '{ "msgCode": "feeling", "msgData": "' + type + '"}',
+            error: function(reason) { toastr.warning(reason); },
+            success: function() {  },
+        });
+    else {
+        sfutest.data({
+            text: '{ "msgCode": "addfeeling", "msgData": "' + type + '"}',
+            error: function(reason) { toastr.warning(reason); },
+            success: function() { toastr.success("Operation Done."); },
+        });
+        addfeeling( type );
+    }
 }
 
 </script>
@@ -1063,7 +1092,17 @@ function listenNewMember( id )
             var data = JSON.parse(response);
             switch ( data.msgCode )
             {
-                
+                case 'feeling':
+                    sfutest.data({
+                        text: '{ "msgCode": "addfeeling", "msgData": "' + data.msgData + '"}',
+                        error: function(reason) { toastr.warning(reason); },
+                        success: function() {  },
+                    });
+                    addfeeling( data.msgData );
+                    break;
+                case 'comment':
+
+                    break;
             }
         },
         onmessage: function(msg, jsep) {
@@ -1073,18 +1112,18 @@ function listenNewMember( id )
                 console.log('jsep', jsep);
                 // Answer and attach
                 remoteFeed.createAnswer(
-                    {
-                        jsep: jsep,
-                        media: { audioRecv: false, videoRecv: false, audioSend: false, videoSend: false, data: true },	// We want recvonly audio/video
-                        success: function(jsep) {
-                            var body = { "request": "start", "room": parseInt(roomId) };
-                            remoteFeed.send({"message": body, "jsep": jsep});
-                        },
-                        error: function(error) {
-                            Janus.error("WebRTC error:", error);
-                            bootbox.alert("WebRTC error... " + JSON.stringify(error));
-                        }
-                    });
+                {
+                    jsep: jsep,
+                    media: { audioRecv: false, videoRecv: false, audioSend: false, videoSend: false, data: true },	// We want recvonly audio/video
+                    success: function(jsep) {
+                        var body = { "request": "start", "room": parseInt(roomId) };
+                        remoteFeed.send({"message": body, "jsep": jsep});
+                    },
+                    error: function(error) {
+                        Janus.error("WebRTC error:", error);
+                        bootbox.alert("WebRTC error... " + JSON.stringify(error));
+                    }
+                });
             }
         }
     });

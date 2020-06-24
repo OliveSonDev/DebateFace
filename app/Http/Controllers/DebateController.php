@@ -237,4 +237,37 @@ class DebateController extends Controller
         else
             return response()->json( 'fail' );
     }
+
+    /**
+     * Add a feeling for a debator in a debate
+     */
+    public function addFeeling(Request $request)
+    {
+        $debate = Debate::where('id', $request['roomId'])->first();
+        if( $debate != NULL )
+        {
+            if( $request['type'] == 'one_upvote' )
+                $debate->one_upvote ++;
+            else if( $request['type'] == 'one_downvote' )
+                $debate->one_downvote ++;
+            else if( $request['type'] == 'one_heart' )
+                $debate->one_heart ++;
+            else if( $request['type'] == 'one_sharp' )
+                $debate->one_sharp ++;
+            else if( $request['type'] == 'two_upvote' )
+                $debate->two_upvote ++;
+            else if( $request['type'] == 'two_downvote' )
+                $debate->two_downvote ++;
+            else if( $request['type'] == 'two_heart' )
+                $debate->two_heart ++;
+            else if( $request['type'] == 'two_sharp' )
+                $debate->two_sharp ++;
+
+            $debate->save();
+
+            return response()->json( 'success' );
+        }    
+        else
+            return response()->json( 'fail' );
+    }
 }
