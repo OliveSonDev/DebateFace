@@ -47,3 +47,9 @@ Route::post('/feeling', 'DebateController@addFeeling')->name('feeling');
 
 // Add a comment for a debate
 Route::post('/comment', 'DebateController@addComment')->name('comment');
+
+// Send invite for a debator
+Route::post('/invite', 'DebateController@sendInvite')->name('invite');
+
+// Check invitation and delete in a invitation list
+Route::post('/checkinvite', 'DebateController@checkInvite')->name('checkinvite');

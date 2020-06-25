@@ -1,11 +1,13 @@
 <?php
   
 namespace App\Http\Controllers;
-  
+
+use Mail;
 use Auth;
 use App\User;
 use App\Debate;
 use App\Comments;
+use App\Invites;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
   
@@ -289,5 +291,59 @@ class DebateController extends Controller
         $comment->save();
         
         return response()->json( Auth::user()->name );
+    }
+
+    /**
+     * Send Invite for a debator in a debate
+     */
+    public function sendInvite(Request $request)
+    {
+        $debate = Debate::where('id', $request['roomId'])->first();
+        if( $debate != NULL )
+        {
+            if( $request['who'] == 'debator_one' )
+            {
+                $debate->debator_one = $request['email'];
+                $debate->one_timelimit = 0;
+            }
+            else if( $request['who'] == 'debator_two' )
+            {
+                $debate->debator_two = $request['email'];
+                $debate->one_timelimit = 0;
+            }
+            $debate->save();
+
+            // Create new invite
+            $invite = Invites::create([
+                'debateid' => $request['roomId'],
+                'email' => $request['email']
+            ]);
+
+            // Mail::send('emails.invitation', ['debateid' => $debate->id, 'topic' => $debate->topic], function ($m) use ($invite) {
+
+            //     $m->to($invite->email)->subject('You got an invitation!');
+            // });
+    
+            $invite->save();
+
+            return response()->json( 'success' );
+        }    
+        else
+            return response()->json( 'fail' );
+    }
+
+    /**
+     * Check Invite for a debator in a debate and delete it
+     */
+    public function checkInvite(Request $request)
+    {
+        $invite = Invites::where('email', Auth::user()->email)->where('debateid', $request['roomId'])->first();
+        if( $invite != NULL )
+        {
+            $invite->delete();
+            return response()->json( 'success' );
+        }    
+        else
+            return response()->json( 'fail' );
     }
 }

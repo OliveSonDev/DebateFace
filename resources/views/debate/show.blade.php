@@ -105,269 +105,283 @@
 
     <main class="py-4">
         <div class="container">
+                <div class = "row">
+                    <div class = "col-md-10 offset-md-1 text-center py-4">
+                        <div class = "topicPane"> Topic: {{ $debate->topic }} </div>
+                    </div>
+                </div>
             @if ( $usertype == 'moderator' ) 
                 <div class = "row">
-                    <div class = "col-md-3 offset-md-2">
+                    <div class = "col-md-4 offset-md-1">
                         <div class = "modCtrlDiv">
                             <div>
+                                <div class = "text-center"> User </div>
+                                <div class = "text-center"> <h4 id = "username_one_display"> Debator One <h4> </div>
                                 <div class = "modCtrlButtons">
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Mute </div>
                                         <div class = "modCtrlImgDiv" onclick = "mute('debator_one')">
                                             <img src = "{{ asset('img/mute.png') }}" class = "modCtrlImg" alt = "mute"> 
                                         </div>
+                                        <div class = "text-center"> Mute </div>
                                     </div>
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Timer </div>
                                         <div class = "modCtrlImgDiv" onclick = "timelimit('one')">
                                             <img src = "{{ asset('img/timer.png') }}" class = "modCtrlImg" alt = "timer"> 
                                         </div>
+                                        <div class = "text-center"> Timer </div>
                                     </div>
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Boot </div>
                                         <div class = "modCtrlImgDiv" onclick = "kick('one')">
                                             <img src = "{{ asset('img/boot.png') }}" class = "modCtrlImg" alt = "boot"> 
                                         </div>
+                                        <div class = "text-center"> Boot </div>
                                     </div>
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Send Invite </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "invite('debator_one')">
                                             <img src = "{{ asset('img/email.png') }}" class = "modCtrlImg" alt = "email"> 
                                         </div>
+                                        <div class = "text-center"> Send Invite </div>
                                     </div>
                                 </div>
-                                <div class = "text-center mt-1"> <h4 id = "username_one"> User: <h4> </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="panel-heading">
-                            <h3 class="panel-title text-center">Moderator<span class="label label-info hide" id="remote1"></span></h3>
-                        </div>
-                        <div class="panel panel-default">
+                    <div class="col-md-2 mb-3">
+                        <div class="panel panel-default moderatorPane">
                             <div class="panel-body relative videoContainer" id="moderator_container">
                                 <video class="rounded centered" id="moderator" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
-                            <div class = "py-2"> <h5 class = "text-center"> Your Debate </h5> </div>
+                            <div class = "mt-1 moderatorText"> <div>Moderator</div> <div>Debate #{{ $roomId }}</div></div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class = "modCtrlDiv">
                             <div>
+                                <div class = "text-center"> User </div>
+                                <div class = "text-center"> <h4 id = "username_two_display"> Debator Two <h4> </div>
                                 <div class = "modCtrlButtons">
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Mute </div>
                                         <div class = "modCtrlImgDiv" onclick = "mute('debator_two')">
                                             <img src = "{{ asset('img/mute.png') }}" class = "modCtrlImg" alt = "mute"> 
                                         </div>
+                                        <div class = "text-center"> Mute </div>
                                     </div>
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Timer </div>
                                         <div class = "modCtrlImgDiv" onclick = "timelimit('two')">
                                             <img src = "{{ asset('img/timer.png') }}" class = "modCtrlImg" alt = "timer"> 
                                         </div>
+                                        <div class = "text-center"> Timer </div>
                                     </div>
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Boot </div>
                                         <div class = "modCtrlImgDiv" onclick = "kick('two')">
                                             <img src = "{{ asset('img/boot.png') }}" class = "modCtrlImg" alt = "boot"> 
                                         </div>
+                                        <div class = "text-center"> Boot </div>
                                     </div>
                                     <div class = "modCtrlContainer">
-                                        <div class = "text-center"> Send Invite </div>
-                                        <div class = "modCtrlImgDiv">
+                                        <div class = "modCtrlImgDiv" onclick = "invite('debator_two')">
                                             <img src = "{{ asset('img/email.png') }}" class = "modCtrlImg" alt = "email"> 
                                         </div>
+                                        <div class = "text-center"> Send Invite </div>
                                     </div>
                                 </div>
-                                <div class = "text-center mt-1"> <h4 id = "username_two"> User: <h4> </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class = "row">
-                    <div class = "col-md-12 text-center py-4">
-                        <div> <h2 class=""> Topic: {{ $debate->topic }} </h2> </div>
-                        <div> <h5 class=""> Debate #: {{ $debate->id }} </h5> </div>
                     </div>
                 </div>
                 
                 <div class = "row">
-                    <div class="col-md-4 offset-md-2">
-                        <div class="panel panel-default">
+                    <div class="col-md-5 offset-md-1">
+                        <div class="panel panel-default debatorPane">
                             <div class="panel-body relative videoContainer" id="debator_one_container">
                                 <video class="rounded centered" id="debator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
+                            <div class = "mb-1 userDisplay">
+                                <div class = "userNameDisplay borderRight">
+                                    <div class = "text-center"> User </div>
+                                    <div class = "text-center"> <h4 id = "username_one"> Debator One <h4> </div>
+                                </div>
+                                <div class = "userNameDisplay">
+                                    <div class = "text-center"> Time left </div>
+                                    <div class = "text-center"> <h4 id = "one_timelimit"> Unlimited </h4> </div>
+                                </div>
+                            </div>
+                            <div class="modStatusContainer">
+                                <div class = "mt-2 modStatusPane">
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')">
+                                            <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                        </div>
+                                        <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
+                                            <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                        </div>
+                                        <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
+                                            <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                        </div>
+                                        <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
+                                            <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                        </div>
+                                        <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4" >
-                        <div class="panel panel-default">
+                    <div class="col-md-5" >
+                        <div class="panel panel-default debatorPane">
                             <div class="panel-body relative videoContainer" id="debator_two_container">
                                 <video class="rounded centered" id="debator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class = "row">
-                    <div class = "col-md-4 offset-md-2">
-                        <div class="modStatusContainer mt-2">
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')">
-                                    <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                            <div class = "mb-1 userDisplay">
+                                <div class = "userNameDisplay borderRight">
+                                    <div class = "text-center"> User </div>
+                                    <div class = "text-center"> <h4 id = "username_two"> Debator One <h4> </div>
                                 </div>
-                                <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
-                            </div>
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
-                                    <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                <div class = "userNameDisplay">
+                                    <div class = "text-center"> Time left </div>
+                                    <div class = "text-center"> <h4 id = "two_timelimit"> Unlimited </h4> </div>
                                 </div>
-                                <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
                             </div>
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
-                                    <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                            <div class="modStatusContainer">
+                                <div class = "mt-2 modStatusPane">
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
+                                            <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                        </div>
+                                        <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
+                                            <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                        </div>
+                                        <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
+                                            <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                        </div>
+                                        <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
+                                            <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                        </div>
+                                        <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
+                                    </div>
                                 </div>
-                                <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
                             </div>
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
-                                    <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
-                                </div>
-                                <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
-                            </div>
-                            <div class = "text-center text-middle"> <h4 id = "one_timelimit"> Time Left: Unlimited </h4> </div>
-                        </div>
-                    </div>
-                    <div class = "col-md-4">
-                        <div class="modStatusContainer mt-2">
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
-                                    <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
-                                </div>
-                                <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
-                            </div>
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
-                                    <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
-                                </div>
-                                <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
-                            </div>
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
-                                    <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
-                                </div>
-                                <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
-                            </div>
-                            <div class = "text-center">
-                                <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
-                                    <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
-                                </div>
-                                <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
-                            </div>
-                            <div class = "text-center text-middle"> <h4 id = "two_timelimit"> Time Left: Unlimited </h4> </div>
                         </div>
                     </div>
                 </div>
             @else
                 <div class = "row">
-                    <div class = "col-md-12 text-center py-4">
-                        <div> <h2 class=""> Topic: {{ $debate->topic }} </h2> </div>
-                    </div>
-                </div>
-                <div class = "row">
-                    <div class="col-md-4 offset-md-2">
-                        <div class="panel panel-default">
+                    <div class="col-md-5 offset-md-1">
+                        <div class="panel panel-default debatorPane">
                             <div class="panel-body relative videoContainer" id="debator_one_container">
                                 <video class="rounded centered" id="debator_one" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
-                        </div>
-                        <div class = "modStatusContainer mt-1">
-                            <div> <h4 id = "username_one"> User: <h4> </div>
-                            <div> <h4 id = "one_timelimit"> Time left: Unlimited </h4> </div>
+                            <div class = "mb-1 userDisplay">
+                                <div class = "userNameDisplay borderRight">
+                                    <div class = "text-center"> User </div>
+                                    <div class = "text-center"> <h4 id = "username_one"> Debator One <h4> </div>
+                                </div>
+                                <div class = "userNameDisplay">
+                                    <div class = "text-center"> Time left </div>
+                                    <div class = "text-center"> <h4 id = "one_timelimit"> Unlimited </h4> </div>
+                                </div>
+                            </div>
+                            <div class="modStatusContainer">
+                                <div class = "mt-2 modStatusPane">
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')">
+                                            <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                        </div>
+                                        <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
+                                            <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                        </div>
+                                        <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
+                                            <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                        </div>
+                                        <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
+                                            <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                        </div>
+                                        <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4" >
-                        <div class="panel panel-default">
+                    <div class="col-md-5" >
+                        <div class="panel panel-default debatorPane">
                             <div class="panel-body relative videoContainer" id="debator_two_container">
                                 <video class="rounded centered" id="debator_two" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
-                        </div>
-                        <div class = "modStatusContainer mt-1">
-                            <div> <h4 id = "username_two"> User: <h4> </div>
-                            <div> <h4 id = "two_timelimit"> Time left: Unlimited </h4> </div>
+                            <div class = "mb-1 userDisplay">
+                                <div class = "userNameDisplay borderRight">
+                                    <div class = "text-center"> User </div>
+                                    <div class = "text-center"> <h4 id = "username_two"> Debator One <h4> </div>
+                                </div>
+                                <div class = "userNameDisplay">
+                                    <div class = "text-center"> Time left </div>
+                                    <div class = "text-center"> <h4 id = "two_timelimit"> Unlimited </h4> </div>
+                                </div>
+                            </div>
+                            <div class="modStatusContainer">
+                                <div class = "mt-2 modStatusPane">
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
+                                            <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
+                                        </div>
+                                        <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
+                                            <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
+                                        </div>
+                                        <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
+                                            <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
+                                        </div>
+                                        <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
+                                    </div>
+                                    <div class = "text-center">
+                                        <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
+                                            <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
+                                        </div>
+                                        <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class = "row mt-2">
-                    <div class = "col-md-3 offset-md-2">
-                        <div class = "modCtrlDiv">
-                            <div class = "modStatusContainer">
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')" >
-                                        <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
-                                    </div>
-                                    <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
-                                </div>
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
-                                        <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
-                                    </div>
-                                    <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
-                                </div>
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
-                                        <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
-                                    </div>
-                                    <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
-                                </div>
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
-                                        <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
-                                    </div>
-                                    <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title text-center">Moderator<span class="label label-info hide" id="remote1"></span></h3>
-                            </div>
+                <div class = "row mt-2 mt-5">
+                    <div class="col-md-2 offset-md-5">
+                        <div class="panel panel-default moderatorPane">
                             <div class="panel-body relative videoContainer" id="moderator_container">
                                 <video class="rounded centered" id="moderator" width="100%" height="100%" autoplay playsinline muted="muted"/>
                             </div>
-                            <div class = "mt-2 text-center"> <h5> Debate #: {{ $debate->id }} </h5> </div>
-                        </div>
-                    </div>
-                    <div class = "col-md-3 ">
-                        <div class = "modCtrlDiv">
-                            <div class = "modStatusContainer">
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
-                                        <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
-                                    </div>
-                                    <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
-                                </div>
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
-                                        <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
-                                    </div>
-                                    <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
-                                </div>
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
-                                        <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
-                                    </div>
-                                    <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
-                                </div>
-                                <div class = "text-center">
-                                    <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
-                                        <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
-                                    </div>
-                                    <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
-                                </div>
-                            </div>
+                            <div class = "mt-1 moderatorText"> <div>Moderator</div> <div>Debate #{{ $roomId }}</div></div>
                         </div>
                     </div>
                 </div>
@@ -434,10 +448,10 @@ $(document).ready(function() {
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
 
     if( one_timelimit == 'unlimited' )
-        $('#one_timelimit')[0].innerHTML = 'Time left: Unlimited';
+        $('#one_timelimit')[0].innerHTML = 'Unlimited';
     else if( one_timelimit == 0 )
     {
-        $('#one_timelimit')[0].innerHTML = 'Time left: 00:00';
+        $('#one_timelimit')[0].innerHTML = '00:00';
         if( username == 'debator_one' )
             toastr.warning('Time is out...');
     }    
@@ -458,10 +472,10 @@ $(document).ready(function() {
     }
 
     if( two_timelimit == 'unlimited' )
-        $('#two_timelimit')[0].innerHTML = 'Time left: Unlimited';
+        $('#two_timelimit')[0].innerHTML = 'Unlimited';
     else if( one_timelimit == 0 )
     {
-        $('#two_timelimit')[0].innerHTML = 'Time left: 00:00';
+        $('#two_timelimit')[0].innerHTML = '00:00';
         if( username == 'debator_two' )
             toastr.warning('Time is out...');
     }    
@@ -516,6 +530,17 @@ $(document).ready(function() {
                                 myid = msg["id"];
                                 mypvtid = msg["private_id"];
                                 Janus.log("Successfully joined room " + msg["room"] + " with ID " + myid);
+
+                                $.ajax({
+                                    type:'POST',
+                                    url:"{{ route('checkinvite') }}",
+                                    data:{ roomId: roomId },
+                                    success: function(data){
+                                        if( data == 'success' )
+                                            console.log('checked invite');
+                                    }
+                                });
+
                                 if ( usertype == "publisher" )
                                     publishOwnFeed(true);
                                 else
@@ -745,7 +770,11 @@ function setUserName( usertype )
         data:{ type: usertype, roomId: roomId },
         success: function(data){
             if( data.name )
-                $("#username_" + usertype)[0].innerHTML = 'User: ' + data.name;
+            {
+                $("#username_" + usertype)[0].innerHTML = data.name;
+                if( username == 'moderator' )
+                    $("#username_" + usertype + "_display")[0].innerHTML = data.name;
+            }
         }
     });
 }
@@ -911,7 +940,7 @@ function setupTimeLimit( who, limit )
             if( timerOne ) clearInterval( timerOne );
             timerOne = setInterval(function(){
                 seconds --;
-                $('#one_timelimit')[0].innerHTML = 'Time left: ' + fancyTimeFormat( seconds );
+                $('#one_timelimit')[0].innerHTML = fancyTimeFormat( seconds );
                 if( seconds <= 0)
                     clearInterval( timerOne );
             }, 1000);
@@ -921,7 +950,7 @@ function setupTimeLimit( who, limit )
             if( timerTwo ) clearInterval( timerTwo );
             timerTwo = setInterval(function(){
                 seconds --;
-                $('#two_timelimit')[0].innerHTML = 'Time left: ' + fancyTimeFormat( seconds );
+                $('#two_timelimit')[0].innerHTML = fancyTimeFormat( seconds );
                 if( seconds <= 0)
                     clearInterval( timerTwo );
             }, 1000);
@@ -958,7 +987,7 @@ function feeling( type )
         sfutest.data({
             text: '{ "msgCode": "addfeeling", "msgData": "' + type + '"}',
             error: function(reason) { toastr.warning(reason); },
-            success: function() { toastr.success("Operation Done."); },
+            success: function() {  },
         });
         addfeeling( type );
     }
@@ -985,6 +1014,9 @@ function addComment( username, text )
     comment.appendChild( commentPane );
 
     document.getElementById('commentsPanel').appendChild( comment );
+
+    var commentsPanel = document.getElementById("commentsPanel");
+    commentsPanel.scrollTop = commentsPanel.scrollHeight;
 }
 
 function comment(){
@@ -1117,6 +1149,42 @@ function timelimit( who )
                 }
             });
         }
+    })
+}
+
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+function invite( who )
+{
+    swal({
+        text: 'Input the email of the debator.',
+        content: "input",
+        button: {
+            text: "OK",
+            closeModal: true,
+        },
+    })
+    .then( email => {
+        if( validateEmail( email ) )
+        {
+            $.ajax({
+                type:'POST',
+                url:"{{ route('invite') }}",
+                data:{ roomId: roomId, who: who, email: email },
+                success: function( data )
+                {
+                    if( data == 'success' )
+                        swal("Invite sent.", { icon: "success", });
+                    else
+                        swal("Invitation failed.", { icon: "warning", });
+                }
+            });
+        }
+        else
+            swal("Invalid email.", { icon: "warning", });
     })
 }
 
