@@ -107,7 +107,7 @@
         <div class="container">
                 <div class = "row">
                     <div class = "col-md-10 offset-md-1 text-center py-4">
-                        <div class = "topicPane"> Topic: {{ $debate->topic }} </div>
+                        <div class = "topicPane"> Topic: {{ $topic }} </div>
                     </div>
                 </div>
             @if ( $usertype == 'moderator' ) 
@@ -212,25 +212,25 @@
                                         <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')">
                                             <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                         </div>
-                                        <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
+                                        <div class = "text-center" id = "one_upvote_display"> {{ $feeling['one_upvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
                                             <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                         </div>
-                                        <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
+                                        <div class = "text-center" id = "one_downvote_display"> {{ $feeling['one_downvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
                                             <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                         </div>
-                                        <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
+                                        <div class = "text-center" id = "one_heart_display"> {{ $feeling['one_heart'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
                                             <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                         </div>
-                                        <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
+                                        <div class = "text-center" id = "one_sharp_display"> {{ $feeling['one_sharp'] }} </div>
                                     </div>
                                 </div>
                             </div>
@@ -257,25 +257,25 @@
                                         <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
                                             <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                         </div>
-                                        <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
+                                        <div class = "text-center" id = "two_upvote_display"> {{ $feeling['two_upvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
                                             <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                         </div>
-                                        <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
+                                        <div class = "text-center" id = "two_downvote_display"> {{ $feeling['two_downvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
                                             <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                         </div>
-                                        <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
+                                        <div class = "text-center" id = "two_heart_display"> {{ $feeling['two_heart'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
                                             <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                         </div>
-                                        <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
+                                        <div class = "text-center" id = "two_sharp_display"> {{ $feeling['two_sharp'] }} </div>
                                     </div>
                                 </div>
                             </div>
@@ -305,25 +305,25 @@
                                         <div class = "modStatusCtrl" id = "one_upvote" onclick = "feeling('one_upvote')">
                                             <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                         </div>
-                                        <div class = "text-center" id = "one_upvote_display"> {{ $debate->one_upvote }} </div>
+                                        <div class = "text-center" id = "one_upvote_display"> {{ $feeling['one_upvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "one_downvote" onclick = "feeling('one_downvote')">
                                             <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                         </div>
-                                        <div class = "text-center" id = "one_downvote_display"> {{ $debate->one_downvote }} </div>
+                                        <div class = "text-center" id = "one_downvote_display"> {{ $feeling['one_downvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "one_heart" onclick = "feeling('one_heart')">
                                             <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                         </div>
-                                        <div class = "text-center" id = "one_heart_display"> {{ $debate->one_heart }} </div>
+                                        <div class = "text-center" id = "one_heart_display"> {{ $feeling['one_heart'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "one_sharp" onclick = "feeling('one_sharp')">
                                             <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                         </div>
-                                        <div class = "text-center" id = "one_sharp_display"> {{ $debate->one_sharp }} </div>
+                                        <div class = "text-center" id = "one_sharp_display"> {{ $feeling['one_sharp'] }} </div>
                                     </div>
                                 </div>
                             </div>
@@ -350,25 +350,25 @@
                                         <div class = "modStatusCtrl" id = "two_upvote" onclick = "feeling('two_upvote')">
                                             <img src = "{{ asset('img/upvote.png') }}" class = "modStatusImg" alt = "upvote">
                                         </div>
-                                        <div class = "text-center" id = "two_upvote_display"> {{ $debate->two_upvote }} </div>
+                                        <div class = "text-center" id = "two_upvote_display"> {{ $feeling['two_upvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "two_downvote" onclick = "feeling('two_downvote')">
                                             <img src = "{{ asset('img/downvote.png') }}" class = "modStatusImg" alt = "downvote">
                                         </div>
-                                        <div class = "text-center" id = "two_downvote_display"> {{ $debate->two_downvote }} </div>
+                                        <div class = "text-center" id = "two_downvote_display"> {{ $feeling['two_downvote'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "two_heart" onclick = "feeling('two_heart')">
                                             <img src = "{{ asset('img/heart.png') }}" class = "modStatusImg" alt = "heart">
                                         </div>
-                                        <div class = "text-center" id = "two_heart_display"> {{ $debate->two_heart }} </div>
+                                        <div class = "text-center" id = "two_heart_display"> {{ $feeling['two_heart'] }} </div>
                                     </div>
                                     <div class = "text-center">
                                         <div class = "modStatusCtrl" id = "two_sharp" onclick = "feeling('two_sharp')">
                                             <img src = "{{ asset('img/sharp.png') }}" class = "modStatusImg" alt = "sharp">
                                         </div>
-                                        <div class = "text-center" id = "two_sharp_display"> {{ $debate->two_sharp }} </div>
+                                        <div class = "text-center" id = "two_sharp_display"> {{ $feeling['two_sharp'] }} </div>
                                     </div>
                                 </div>
                             </div>

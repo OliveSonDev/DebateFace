@@ -108,13 +108,24 @@ class DebateController extends Controller
         $one_timelimit = (int)$debate->one_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->one_timelimit ? $debate->one_timelimit - (int)time(): 0);
         $two_timelimit = (int)$debate->two_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->two_timelimit ? $debate->two_timelimit - (int)time() : 0);
 
+        $feeling = [];
+        $feeling['one_upvote'] = $debate->one_upvote ? count( explode(",", $debate->one_upvote) ) : 0;
+        $feeling['one_downvote'] = $debate->one_downvote ? count( explode(",", $debate->one_downvote) ) : 0;
+        $feeling['one_heart'] = $debate->one_heart ? count( explode(",", $debate->one_heart) ) : 0;
+        $feeling['one_sharp'] = $debate->one_sharp ? count( explode(",", $debate->one_sharp) ) : 0;
+        $feeling['two_upvote'] = $debate->two_upvote ? count( explode(",", $debate->two_upvote) ) : 0;
+        $feeling['two_downvote'] = $debate->two_downvote ? count( explode(",", $debate->two_downvote) ) : 0;
+        $feeling['two_heart'] = $debate->two_heart ? count( explode(",", $debate->two_heart) ) : 0;
+        $feeling['two_sharp'] = $debate->two_sharp ? count( explode(",", $debate->two_sharp) ) : 0;
+
         $comments = Comments::where('debateid', $id)->get();
 
         return view('debate.show')
-               ->with('debate', $debate)
+               ->with('topic', $debate->topic)
                ->with('usertype', $usertype)
                ->with('roomId', $id)
                ->with('pin', $password)
+               ->with('feeling', $feeling)
                ->with('one_timelimit', $one_timelimit)
                ->with('two_timelimit', $two_timelimit)
                ->with('comments', $comments);

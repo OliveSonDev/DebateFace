@@ -59,7 +59,7 @@
                                 <a class = "nav-link" href = "{{ route('join') }}"> {{ __('Browse/Join a Debate') }} </a>
                             </li>
                             <li class="nav-item">
-                                <a class = "nav-link" href = "{{ route('home') }}"> {{ __('Start a Debate') }} </a>
+                                <a class = "nav-link" href = "{{ route('start') }}"> {{ __('Start a Debate') }} </a>
                             </li>
                             <li class="nav-item">
                                 <a class = "nav-link" href = "{{ route('home') }}"> {{ __('About') }} </a>
