@@ -260,32 +260,112 @@ class DebateController extends Controller
      */
     public function addFeeling(Request $request)
     {
+        $result = 'fail';
+        $ids = [];
+
         $debate = Debate::where('id', $request['roomId'])->first();
+
         if( $debate != NULL )
         {
             if( $request['type'] == 'one_upvote' )
-                $debate->one_upvote ++;
+            {
+                if( $debate->one_upvote )
+                    $ids = explode(",", $debate->one_upvote);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->one_upvote = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
             else if( $request['type'] == 'one_downvote' )
-                $debate->one_downvote ++;
+            {
+                if( $debate->one_downvote )
+                    $ids = explode(",", $debate->one_downvote);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->one_downvote = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
             else if( $request['type'] == 'one_heart' )
-                $debate->one_heart ++;
+            {
+                if( $debate->one_heart )
+                    $ids = explode(",", $debate->one_heart);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->one_heart = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
             else if( $request['type'] == 'one_sharp' )
-                $debate->one_sharp ++;
+            {
+                if( $debate->one_sharp )
+                    $ids = explode(",", $debate->one_sharp);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->one_sharp = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
             else if( $request['type'] == 'two_upvote' )
-                $debate->two_upvote ++;
+            {
+                if( $debate->two_upvote )
+                    $ids = explode(",", $debate->two_upvote);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->two_upvote = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
             else if( $request['type'] == 'two_downvote' )
-                $debate->two_downvote ++;
+            {
+                if( $debate->two_downvote )
+                    $ids = explode(",", $debate->two_downvote);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->two_downvote = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
             else if( $request['type'] == 'two_heart' )
-                $debate->two_heart ++;
+            {
+                if( $debate->two_heart )
+                    $ids = explode(",", $debate->two_heart);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->two_heart = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
             else if( $request['type'] == 'two_sharp' )
-                $debate->two_sharp ++;
-
-            $debate->save();
-
-            return response()->json( 'success' );
+            {
+                if( $debate->two_sharp )
+                    $ids = explode(",", $debate->two_sharp);
+                if( !in_array(Auth::user()->id, $ids) )
+                {
+                    array_push($ids, Auth::user()->id);
+                    $debate->two_sharp = implode(",", $ids);
+                    $debate->save();
+                    $result = 'success';
+                }
+            }
         }    
-        else
-            return response()->json( 'fail' );
+
+        return response()->json( $result );
     }
 
     /**

@@ -972,25 +972,26 @@ function feeling( type )
         data:{ roomId: roomId, type: type },
         success: function( data ){
             if( data == 'success' )
+            {
                 toastr.success("Operation Done.");
-            else
-                toastr.success("Something wrong...");
+                if( username != 'moderator' )
+                    sfutest.data({
+                        text: '{ "msgCode": "feeling", "msgData": "' + type + '"}',
+                        error: function(reason) { toastr.warning(reason); },
+                        success: function() {  },
+                    });
+                else {
+                    sfutest.data({
+                        text: '{ "msgCode": "addfeeling", "msgData": "' + type + '"}',
+                        error: function(reason) { toastr.warning(reason); },
+                        success: function() {  },
+                    });
+                    addfeeling( type );
+                }
+            }    
+            // else
+            //     toastr.success("...");
     } });
-
-    if( username != 'moderator' )
-        sfutest.data({
-            text: '{ "msgCode": "feeling", "msgData": "' + type + '"}',
-            error: function(reason) { toastr.warning(reason); },
-            success: function() {  },
-        });
-    else {
-        sfutest.data({
-            text: '{ "msgCode": "addfeeling", "msgData": "' + type + '"}',
-            error: function(reason) { toastr.warning(reason); },
-            success: function() {  },
-        });
-        addfeeling( type );
-    }
 }
 
 function addComment( username, text )
