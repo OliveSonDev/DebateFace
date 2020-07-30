@@ -386,27 +386,48 @@
                     </div>
                 </div>
             @endif
-            <div class = "commentsPane mt-5" id = "commentsPanel">
-                @foreach ($comments as $comment)
-                <div class = "row mt-2">
-                    <div class = "col-md-2 text-right">
-                        {{ $comment->username }}
-                    </div>
-                    <div class = "col-md-8 pb-2 commentDivider">
-                        <div class = "commentText"> {{ $comment->text }} </div>
+            <div class = "row">
+                <div class="col-md-5 offset-md-1">
+                    <div class = "commentsPane mt-5" id = "commentsPanelOne">
+                        @foreach ($commentsone as $comment)
+                        <div class = "row mt-2">
+                            <div class = "col-md-2 text-right">
+                                {{ $comment->username }}
+                            </div>
+                            <div class = "col-md-10 pb-2 commentDivider">
+                                <div class = "commentText"> {{ $comment->text }} </div>
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
-                @endforeach
+                <div class="col-md-5">
+                    <div class = "commentsPane mt-5" id = "commentsPanelTwo">
+                        @foreach ($commentstwo as $comment)
+                        <div class = "row mt-2">
+                            <div class = "col-md-2 text-right">
+                                {{ $comment->username }}
+                            </div>
+                            <div class = "col-md-10 pb-2 commentDivider">
+                                <div class = "commentText"> {{ $comment->text }} </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
             <div class = "row mt-5">
-                <div class = "col-md-2 text-right">
-                    Your Comment
+                <div class = "col-md-1 text-right">
+                    <button class = "doCommentBtn" onclick = "comment('one')">Comment</button>
                 </div>
-                <div class = "col-md-8">
-                    <textarea class = "myCommentText" id = "myComment">  </textarea>
+                <div class = "col-md-5">
+                    <textarea class = "myCommentText" id = "myCommentOne">  </textarea>
                 </div>
-                <div class = "col-md-2 text-left">
-                    <button class = "doCommentBtn" onclick = "comment()">Send Comment</button>
+                <div class = "col-md-5">
+                    <textarea class = "myCommentText" id = "myCommentTwo">  </textarea>
+                </div>
+                <div class = "col-md-1 text-left">
+                    <button class = "doCommentBtn" onclick = "comment('two')">Comment</button>
                 </div>
             </div>
         </div>
@@ -701,7 +722,12 @@ $(document).ready(function() {
 
                             var videoTracks = stream.getVideoTracks();
                             if(videoTracks === null || videoTracks === undefined || videoTracks.length === 0) {
-                                alert('No Webcam !');
+                                swal({
+                                    title: "Sorry",
+                                    text: "We cannot find any webcam...",
+                                    icon: "warning",
+                                    buttons: true
+                                }) ;
                             }
                         }
                     },
@@ -736,6 +762,12 @@ function publishOwnFeed(useAudio) {
             },
             error: function(error) {
                 Janus.error("WebRTC error:", error);
+                swal({
+                    title: "WebRTC error",
+                    text: error,
+                    icon: "warning",
+                    buttons: true
+                }) ;
                 if (useAudio) {
                         publishOwnFeed(false);
                 } else {
@@ -853,7 +885,7 @@ function newRemoteFeed(id, display, audio, video) {
                     addfeeling( data.msgData );
                     break;
                 case 'addcomment':
-                    addComment( data.username, data.text );
+                    addComment( data.username, data.text, data.type );
                     break;
             }
         },
@@ -994,7 +1026,7 @@ function feeling( type )
     } });
 }
 
-function addComment( username, text )
+function addComment( username, text, type )
 {
     var comment = document.createElement("div");
     comment.className = "row mt-2";
@@ -1014,14 +1046,22 @@ function addComment( username, text )
     comment.appendChild( usernamePane );
     comment.appendChild( commentPane );
 
-    document.getElementById('commentsPanel').appendChild( comment );
+    var commentsPanel;
+    if( type == 'one' )
+        commentsPanel = document.getElementById('commentsPanelOne');
+    else if( type == 'two' )
+        commentsPanel = document.getElementById('commentsPanelTwo');
 
-    var commentsPanel = document.getElementById("commentsPanel");
+    commentsPanel.appendChild( comment );
     commentsPanel.scrollTop = commentsPanel.scrollHeight;
 }
 
-function comment(){
-    var text = $("#myComment").val();
+function comment( type ){
+    var text;
+    if( type == 'one' )
+        text = $("#myCommentOne").val();
+    else
+        text = $("#myCommentTwo").val();
 
     $.ajax({
         type:'POST',
@@ -1030,21 +1070,24 @@ function comment(){
         success: function( name ){
             if( username != 'moderator' )
                 sfutest.data({
-                    text: '{ "msgCode": "comment", "username": "' + name + '", "text": "' + text + '"}',
+                    text: '{ "msgCode": "comment", "username": "' + name + '", "text": "' + text + '", "type": "' + type + '"}',
                     error: function(reason) { toastr.warning(reason); },
                     success: function() { toastr.success("Operation Done."); },
                 });
             else {
                 sfutest.data({
-                    text: '{ "msgCode": "addcomment", "username": "Moderator", "text": "' + text + '"}',
+                    text: '{ "msgCode": "addcomment", "username": "Moderator", "text": "' + text + '", "type": "' + type + '"}',
                     error: function(reason) { toastr.warning(reason); },
                     success: function() { toastr.success("Operation Done."); },
                 });
-                addComment( "Moderator", text );
+                addComment( "Moderator", text, type );
             }   
     } });
 
-    $("#myComment").val('');
+    if( type == 'one' )
+        $("#myCommentOne").val('');
+    else
+        $("#myCommentTwo").val('');
 }
 
 </script>
@@ -1178,7 +1221,11 @@ function invite( who )
                 success: function( data )
                 {
                     if( data == 'success' )
+                    {
+                        setUserName('one');
+                        setUserName('two');
                         swal("Invite sent.", { icon: "success", });
+                    }    
                     else
                         swal("Invitation failed.", { icon: "warning", });
                 }
@@ -1220,7 +1267,7 @@ function listenNewMember( id )
                     break;
                 case 'comment':
                     sfutest.data({
-                        text: '{ "msgCode": "addcomment", "username": "' + data.username + '", "text": "' + data.text + '"}',
+                        text: '{ "msgCode": "addcomment", "username": "' + data.username + '", "text": "' + data.text + '", "type": "' + data.type + '"}',
                         error: function(reason) { toastr.warning(reason); },
                         success: function() {  },
                     });

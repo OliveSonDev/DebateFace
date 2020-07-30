@@ -20,7 +20,7 @@ class DebateController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
     
     /**
@@ -118,7 +118,8 @@ class DebateController extends Controller
         $feeling['two_heart'] = $debate->two_heart ? count( explode(",", $debate->two_heart) ) : 0;
         $feeling['two_sharp'] = $debate->two_sharp ? count( explode(",", $debate->two_sharp) ) : 0;
 
-        $comments = Comments::where('debateid', $id)->get();
+        $commentsone = Comments::where('debateid', $id)->where('who', 'one')->get();
+        $commentstwo = Comments::where('debateid', $id)->where('who', 'two')->get();
 
         return view('debate.show')
                ->with('topic', $debate->topic)
@@ -128,7 +129,8 @@ class DebateController extends Controller
                ->with('feeling', $feeling)
                ->with('one_timelimit', $one_timelimit)
                ->with('two_timelimit', $two_timelimit)
-               ->with('comments', $comments);
+               ->with('commentsone', $commentsone)
+               ->with('commentstwo', $commentstwo);
     }
 
     /**
@@ -376,7 +378,8 @@ class DebateController extends Controller
         $comment = Comments::create([
             'username' => Auth::user()->name,
             'debateid' => $request['roomId'],
-            'text' => $request['text']
+            'text' => $request['text'],
+            'who' => $request['who']
         ]);
 
         $comment->save();
