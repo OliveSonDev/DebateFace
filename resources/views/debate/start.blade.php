@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Start a Debate') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('gostart') }}">
+                    <form method="POST" id="gostartForm">
                         @csrf
 
                         <div class="form-group row">
@@ -106,7 +106,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-5">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" id = "submitBtn">
                                     {{ __('SUBMIT') }}
                                 </button>
                             </div>
@@ -117,4 +117,39 @@
         </div>
     </div>
 </div>
+<script>
+$(function() {
+    $('#submitBtn').click(function() {
+        var debateData = {
+            topic: $("input[name=debatetype]").val(),
+            debatetype: $("input[name=debatetype]")[0].checked ? "0" : "1",
+            password: $("input[name=password]").val()
+        };
+        if( $("input[name=rule]").val() != '' )
+            $debateData['rule'] = $("input[name=rule]").val();
+        if( $("input[name=debator_one]").val() != '' )
+            $debateData['debator_one'] = $("input[name=debator_one]").val();
+        if( $("input[name=debator_two]").val() != '' )
+            $debateData['debator_two'] = $("input[name=debator_two]").val();
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('gostart') }}",
+            data: debateData,
+            error: function()
+            {
+                alert("Request Failed");
+            },
+            success: function(response)
+            {  
+                if( response == 'noauth' )
+                {
+                    
+                }
+            }
+        });
+        return false;
+    }); 
+});
+</script>
 @endsection

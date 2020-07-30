@@ -58,9 +58,12 @@ class DebateController extends Controller
      */
     public function gostart(Request $request)
     {
+        if( !Auth::check() )
+            return response()->json( 'noauth' );
+
         $debate = Debate::create([
             'topic' => $request['topic'],
-            'type' => $request['debatetype'] != NULL ? $request['debatetype'] : '0',
+            'type' => $request['debatetype'],
             'adminkey' => $this->generateRandomString(10),
             'password' => $request['password'] != NULL ? $request['password'] : '',
             'rule' => $request['rule'] != NULL ? $request['rule'] : '',
@@ -72,10 +75,10 @@ class DebateController extends Controller
         $debate->save();
 
         return view('debate.starting')
-               ->with('roomId', $debate->id)
-               ->with('topic', $debate->topic)
-               ->with('adminkey', $debate->adminkey)
-               ->with('password', $request['password'] != NULL ? $request['password'] : '');
+                ->with('roomId', $debate->id)
+                ->with('topic', $debate->topic)
+                ->with('adminkey', $debate->adminkey)
+                ->with('password', $request['password'] != NULL ? $request['password'] : '');
     }
 
     /**
@@ -96,14 +99,16 @@ class DebateController extends Controller
         if( $debate->type == 1 && $debate->password != $password )
             return view('debate.error')->with('error', 'Password does not match...');
 
-        if( $debate->moderator == Auth::user()->id )
-            $usertype = 'moderator';
-        else if( $debate->debator_one == Auth::user()->email )
-            $usertype = 'debator_one';
-        else if( $debate->debator_two == Auth::user()->email )
-            $usertype = 'debator_two';
-        else
-            $usertype = 'subscriber';
+        $usertype = 'subscriber';
+        if( Auth::check() )
+        {
+            if( $debate->moderator == Auth::user()->id )
+                $usertype = 'moderator';
+            else if( $debate->debator_one == Auth::user()->email )
+                $usertype = 'debator_one';
+            else if( $debate->debator_two == Auth::user()->email )
+                $usertype = 'debator_two';
+        }
 
         $one_timelimit = (int)$debate->one_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->one_timelimit ? $debate->one_timelimit - (int)time(): 0);
         $two_timelimit = (int)$debate->two_timelimit == 0 ? 'unlimited' : ((int)time() < $debate->two_timelimit ? $debate->two_timelimit - (int)time() : 0);
@@ -165,44 +170,49 @@ class DebateController extends Controller
      */
     public function goForJoin(Request $request)
     {
-        if( $request['watchDebateId'] != NULL )
+        if( Auth::check() )
         {
-            if( $request['watchPassword'] == NULL )
-                return redirect('debate/'.$request['watchDebateId'] );
-            else
-                return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['watchPassword'] ) );
-        }
-        else if( $request['joinDebateId'] != NULL )
-        {
-            $debate = Debate::where('id', $request['joinDebateId'])->first();
-            if( $debate != NULL )
+            if( $request['watchDebateId'] != NULL )
             {
-                if( $debate->password == $request['joinPassword'] && $debate->debator_one != Auth::user()->email && $debate->debator_two != Auth::user()->email )
-                {
-                    if( $debate->debator_one == NULL )
-                    {
-                        $debate->debator_one = Auth::user()->email;
-                        $debate->save();
-                    }
-                    else if( $debate->debator_two == NULL )
-                    {
-                        $debate->debator_two = Auth::user()->email;
-                        $debate->save();
-                    }
-                    else
-                        return view('debate.error')->with('error', 'Full of debators...');
-                }
-                
-                if( $request['joinPassword'] == NULL )
-                    return redirect('debate/'.$request['joinDebateId'] );
+                if( $request['watchPassword'] == NULL )
+                    return redirect('debate/'.$request['watchDebateId'] );
                 else
-                    return redirect('debate/'.$request['joinDebateId'].'/'.base64_encode( $request['joinPassword'] ) );
+                    return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['watchPassword'] ) );
+            }
+            else if( $request['joinDebateId'] != NULL )
+            {
+                $debate = Debate::where('id', $request['joinDebateId'])->first();
+                if( $debate != NULL )
+                {
+                    if( $debate->password == $request['joinPassword'] && $debate->debator_one != Auth::user()->email && $debate->debator_two != Auth::user()->email )
+                    {
+                        if( $debate->debator_one == NULL )
+                        {
+                            $debate->debator_one = Auth::user()->email;
+                            $debate->save();
+                        }
+                        else if( $debate->debator_two == NULL )
+                        {
+                            $debate->debator_two = Auth::user()->email;
+                            $debate->save();
+                        }
+                        else
+                            return view('debate.error')->with('error', 'Full of debators...');
+                    }
+                    
+                    if( $request['joinPassword'] == NULL )
+                        return redirect('debate/'.$request['joinDebateId'] );
+                    else
+                        return redirect('debate/'.$request['joinDebateId'].'/'.base64_encode( $request['joinPassword'] ) );
+                }
+                else
+                    return view('debate.error')->with('error', 'No such debate...');
             }
             else
-                return view('debate.error')->with('error', 'No such debate...');
+                return redirect('join');
         }
         else
-            return redirect('join');
+            return response()->json( 'noauth' );
     }
 
     /**
@@ -210,11 +220,14 @@ class DebateController extends Controller
      */
     public function getAdminKey(Request $request)
     {
-        $debate = Debate::where('id', $request['roomId'])->first();
-        if( $debate != NULL && $debate->moderator == Auth::user()->id )
-            return response()->json( $debate->adminkey );
-        else
-            return response()->json( '' );
+        if( Auth::check() )
+        {
+            $debate = Debate::where('id', $request['roomId'])->first();
+            if( $debate != NULL && $debate->moderator == Auth::user()->id )
+                return response()->json( $debate->adminkey );
+        }
+        
+        return response()->json( '' );
     }
 
     /**
@@ -222,19 +235,24 @@ class DebateController extends Controller
      */
     public function kickDebator(Request $request)
     {
-        $debate = Debate::where('id', $request['roomId'])->first();
-        if( $debate != NULL && $debate->moderator == Auth::user()->id )
+        if( Auth::check() )
         {
-            if( $request['who'] == 'one' )
-                $debate->debator_one = $debate->debator_one.'kicked';
-            else if( $request['who'] == 'two' )
-                $debate->debator_one = $debate->debator_one.'kicked';
-            $debate->save();
+            $debate = Debate::where('id', $request['roomId'])->first();
+            if( $debate != NULL && $debate->moderator == Auth::user()->id )
+            {
+                if( $request['who'] == 'one' )
+                    $debate->debator_one = $debate->debator_one.'kicked';
+                else if( $request['who'] == 'two' )
+                    $debate->debator_one = $debate->debator_one.'kicked';
+                $debate->save();
 
-            return response()->json( 'success' );
-        }    
+                return response()->json( 'success' );
+            }    
+            else
+                return response()->json( 'fail' );
+        }
         else
-            return response()->json( 'fail' );
+            return response()->json( 'noauth' );
     }
 
     /**
@@ -242,19 +260,24 @@ class DebateController extends Controller
      */
     public function saveTimer(Request $request)
     {
-        $debate = Debate::where('id', $request['roomId'])->first();
-        if( $debate != NULL && $debate->moderator == Auth::user()->id )
+        if( Auth::check() )
         {
-            if( $request['who'] == 'one' )
-                $debate->one_timelimit = (int)time() + $request['limit'] ;
-            else if( $request['who'] == 'two' )
-                $debate->two_timelimit = (int)time() + $request['limit'] ;
-            $debate->save();
+            $debate = Debate::where('id', $request['roomId'])->first();
+            if( $debate != NULL && $debate->moderator == Auth::user()->id )
+            {
+                if( $request['who'] == 'one' )
+                    $debate->one_timelimit = (int)time() + $request['limit'] ;
+                else if( $request['who'] == 'two' )
+                    $debate->two_timelimit = (int)time() + $request['limit'] ;
+                $debate->save();
 
-            return response()->json( 'success' );
-        }    
+                return response()->json( 'success' );
+            }    
+            else
+                return response()->json( 'fail' );
+        }
         else
-            return response()->json( 'fail' );
+            return response()->json( 'noauth' );
     }
 
     /**
@@ -262,6 +285,9 @@ class DebateController extends Controller
      */
     public function addFeeling(Request $request)
     {
+        if( !Auth::check() )
+            return response()->json( 'noauth' );
+        
         $result = 'fail';
         $ids = [];
 
@@ -375,6 +401,9 @@ class DebateController extends Controller
      */
     public function addComment(Request $request)
     {
+        if( !Auth::check() )
+            return response()->json( 'noauth' );
+        
         $comment = Comments::create([
             'username' => Auth::user()->name,
             'debateid' => $request['roomId'],
@@ -392,6 +421,9 @@ class DebateController extends Controller
      */
     public function sendInvite(Request $request)
     {
+        if( !Auth::check() )
+            return response()->json( 'noauth' );
+        
         $debate = Debate::where('id', $request['roomId'])->first();
         if( $debate != NULL )
         {
@@ -431,6 +463,9 @@ class DebateController extends Controller
      */
     public function checkInvite(Request $request)
     {
+        if( !Auth::check() )
+            return response()->json( 'noauth' );
+        
         $invite = Invites::where('email', Auth::user()->email)->where('debateid', $request['roomId'])->first();
         if( $invite != NULL )
         {

@@ -19,7 +19,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/start', 'DebateController@start')->name('start');
-Route::post('/gostart', 'DebateController@gostart')->name('gostart');
+Route::post('/gostart', 'DebateController@gostart');
 
 Route::get('/join', 'DebateController@join')->name('join');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
