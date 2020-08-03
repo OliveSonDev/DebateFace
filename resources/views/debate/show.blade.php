@@ -55,31 +55,22 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
-                    @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            @if (Route::has('register'))
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            @endif
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class = "nav-link" href = "{{ route('home') }}"> {{ __('Home') }} </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class = "nav-link" href = "{{ route('join') }}"> {{ __('Browse/Join a Debate') }} </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class = "nav-link" href = "{{ route('home') }}"> {{ __('Start a Debate') }} </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class = "nav-link" href = "{{ route('home') }}"> {{ __('About') }} </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class = "nav-link" href = "{{ route('home') }}"> {{ __('Contact Us') }} </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class = "nav-link" href = "{{ route('home') }}"> {{ __('Home') }} </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class = "nav-link" href = "{{ route('join') }}"> {{ __('Watch / Join a Debate') }} </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class = "nav-link" href = "{{ route('start') }}"> {{ __('Start a Debate') }} </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class = "nav-link" href = "{{ route('home') }}"> {{ __('About') }} </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class = "nav-link" href = "{{ route('home') }}"> {{ __('Contact Us') }} </a>
+                    </li>
+                    @if ( Auth::check() )
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }} <span class="caret"></span>
@@ -97,7 +88,16 @@
                                 </form>
                             </div>
                         </li>
-                    @endguest
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            @if (Route::has('register'))
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            @endif
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -1005,7 +1005,7 @@ function feeling( type )
         success: function( data ){
             if( data == 'success' )
             {
-                toastr.success("Operation Done.");
+                toastr.success("Done");
                 if( username != 'moderator' )
                     sfutest.data({
                         text: '{ "msgCode": "feeling", "msgData": "' + type + '"}',
@@ -1072,13 +1072,13 @@ function comment( type ){
                 sfutest.data({
                     text: '{ "msgCode": "comment", "username": "' + name + '", "text": "' + text + '", "type": "' + type + '"}',
                     error: function(reason) { toastr.warning(reason); },
-                    success: function() { toastr.success("Operation Done."); },
+                    success: function() { toastr.success("Done"); },
                 });
             else {
                 sfutest.data({
                     text: '{ "msgCode": "addcomment", "username": "Moderator", "text": "' + text + '", "type": "' + type + '"}',
                     error: function(reason) { toastr.warning(reason); },
-                    success: function() { toastr.success("Operation Done."); },
+                    success: function() { toastr.success("Done"); },
                 });
                 addComment( "Moderator", text, type );
             }   
@@ -1153,7 +1153,7 @@ function mute( who )
             sfutest.data({
                 text: '{ "msgCode": "mute", "msgData": "' + who + '"}',
                 error: function(reason) { toastr.warning(reason); },
-                success: function() { toastr.success("Operation Done."); },
+                success: function() { toastr.success("Done"); },
             });
         }
     });
