@@ -29,14 +29,14 @@ class LoginController extends Controller
      * @var string
      */
     public function authenticated()
-{
-    if(auth())
     {
-        return redirect('/home');
-    } 
+        if(auth())
+        {
+            return redirect('/home');
+        } 
 
-    return redirect('/home');
-}
+        return redirect('/home');
+    }
 
     public function logout(Request $request) {
       Auth::logout();

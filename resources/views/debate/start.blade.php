@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Start a Debate') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" id="gostartForm">
+                    <form method="POST" id="gostartForm" action="{{ route('gostart') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -119,37 +119,37 @@
 </div>
 <script>
 $(function() {
-    $('#submitBtn').click(function() {
-        var debateData = {
-            topic: $("input[name=debatetype]").val(),
-            debatetype: $("input[name=debatetype]")[0].checked ? "0" : "1",
-            password: $("input[name=password]").val()
-        };
-        if( $("input[name=rule]").val() != '' )
-            $debateData['rule'] = $("input[name=rule]").val();
-        if( $("input[name=debator_one]").val() != '' )
-            $debateData['debator_one'] = $("input[name=debator_one]").val();
-        if( $("input[name=debator_two]").val() != '' )
-            $debateData['debator_two'] = $("input[name=debator_two]").val();
+    // $('#submitBtn').click(function() {
+    //     var debateData = {
+    //         topic: $("input[name=debatetype]").val(),
+    //         debatetype: $("input[name=debatetype]")[0].checked ? "0" : "1",
+    //         password: $("input[name=password]").val()
+    //     };
+    //     if( $("input[name=rule]").val() != '' )
+    //         $debateData['rule'] = $("input[name=rule]").val();
+    //     if( $("input[name=debator_one]").val() != '' )
+    //         $debateData['debator_one'] = $("input[name=debator_one]").val();
+    //     if( $("input[name=debator_two]").val() != '' )
+    //         $debateData['debator_two'] = $("input[name=debator_two]").val();
 
-        $.ajax({
-            type: 'POST',
-            url: "{{ route('gostart') }}",
-            data: debateData,
-            error: function()
-            {
-                alert("Request Failed");
-            },
-            success: function(response)
-            {  
-                if( response == 'noauth' )
-                {
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: "{{ route('gostart') }}",
+    //         data: debateData,
+    //         error: function()
+    //         {
+    //             alert("Request Failed");
+    //         },
+    //         success: function(response)
+    //         {  
+    //             if( response == 'noauth' )
+    //             {
                     
-                }
-            }
-        });
-        return false;
-    }); 
+    //             }
+    //         }
+    //     });
+    //     return false;
+    // }); 
 });
 </script>
 @endsection

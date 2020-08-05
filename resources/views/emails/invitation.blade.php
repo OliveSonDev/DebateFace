@@ -340,19 +340,19 @@ ul.social li{
 	      </tr><!-- end tr -->
 	      <tr>
           <td valign="middle" class="hero bg_white" style="padding: 3em 0 2em 0;">
-            <img src="images/email.png" alt="" style="width: 300px; max-width: 600px; height: auto; margin: auto; display: block;">
+            <img src="https://debateface.com/public/img/logo.png" alt="" style="width: 300px; max-width: 600px; height: auto; margin: auto; display: block;">
           </td>
 	      </tr><!-- end tr -->
-				<tr>
+		<tr>
           <td valign="middle" class="hero bg_white" style="padding: 2em 0 4em 0;">
             <table>
             	<tr>
             		<td>
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
-            				<h2>{{ $topic }}</h2>
-            				<h3>Debate #{{ $debateid }}</h3>
+            				<h2>{{ $debate->topic }}</h2>
+            				<h3>Debate #{{ $debate->id }}</h3>
                             <h3>Amazing ideas, faces, interesting news right in your debate</h3>
-            				<p><a href="https://debateface.com/home" class="btn btn-primary">Yes! Join Debate</a></p>
+            				<p><a href="https://debateface.com/debate/{{ $debate->id.($debate->password ? '/'.base64_encode($debate->password) : '') }}" class="btn btn-primary">Yes! Join Debate</a></p>
             			</div>
             		</td>
             	</tr>
@@ -371,7 +371,7 @@ ul.social li{
                     <tr>
                       <td style="text-align: left; padding-right: 10px;">
                       	<h3 class="heading">About</h3>
-                      	<p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                      	<p>We’re the new social media platform for debate!</p>
                       </td>
                     </tr>
                   </table>
@@ -382,9 +382,9 @@ ul.social li{
                       <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
                       	<h3 class="heading">Contact Info</h3>
                       	<ul>
-					                <li><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-					                <li><span class="text">+2 392 3929 210</span></a></li>
-					              </ul>
+							<li><span class="text">51 Phillips Hill Rd. New City, New York, United States</span></li>
+							<li><span class="text">+1 8455907048</span></a></li>
+						</ul>
                       </td>
                     </tr>
                   </table>
@@ -395,11 +395,12 @@ ul.social li{
                       <td style="text-align: left; padding-left: 10px;">
                       	<h3 class="heading">Useful Links</h3>
                       	<ul>
-					                <li><a href="#">Home</a></li>
-					                <li><a href="#">About</a></li>
-					                <li><a href="#">Services</a></li>
-					                <li><a href="#">Work</a></li>
-					              </ul>
+							<li><a href="https://debateface.com/home">Home</a></li>
+							<li><a href="https://debateface.com/join">Watch / Join Debate</a></li>
+							<li><a href="https://debateface.com/start">Start Debate</a></li>
+							<li><a href="https://debateface.com/about">About</a></li>
+							<li><a href="https://debateface.com/contactus">Contact Us</a></li>
+						</ul>
                       </td>
                     </tr>
                   </table>

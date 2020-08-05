@@ -845,6 +845,7 @@ function newRemoteFeed(id, display, audio, video) {
                 toastr.warning("Publisher is using " + video + ", but Safari doesn't support it: disabling video");
                 subscribe["offer_video"] = false;
             }
+            remoteFeed.audioCodec = audio;
             remoteFeed.videoCodec = video;
             remoteFeed.send({"message": subscribe});
         },

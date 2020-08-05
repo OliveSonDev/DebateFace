@@ -59,7 +59,7 @@ class DebateController extends Controller
     public function gostart(Request $request)
     {
         if( !Auth::check() )
-            return response()->json( 'noauth' );
+            return redirect('login');
 
         $debate = Debate::create([
             'topic' => $request['topic'],
@@ -73,6 +73,18 @@ class DebateController extends Controller
         ]);
 
         $debate->save();
+
+        //if( $request['debator_one'] )
+        // Mail::send('emails.invitation', ['debate' => $debate], function ($m) use ($invite) {
+
+            //     $m->to($request['debator_one'])->subject('You got an invitation!');
+            // });
+
+        //if( $request['debator_two'] )
+        // Mail::send('emails.invitation', ['debate' => $debate], function ($m) use ($invite) {
+
+            //     $m->to($request['debator_two'])->subject('You got an invitation!');
+            // });
 
         return view('debate.starting')
                 ->with('roomId', $debate->id)
@@ -170,18 +182,19 @@ class DebateController extends Controller
      */
     public function goForJoin(Request $request)
     {
-        if( Auth::check() )
+        if( $request['watchDebateId'] != NULL )
         {
-            if( $request['watchDebateId'] != NULL )
+            if( $request['watchPassword'] == NULL )
+                return redirect('debate/'.$request['watchDebateId'] );
+            else
+                return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['watchPassword'] ) );
+        }
+        else if( $request['joinDebateId'] != NULL )
+        {
+            $debate = Debate::where('id', $request['joinDebateId'])->first();
+
+            if( Auth::check() )
             {
-                if( $request['watchPassword'] == NULL )
-                    return redirect('debate/'.$request['watchDebateId'] );
-                else
-                    return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['watchPassword'] ) );
-            }
-            else if( $request['joinDebateId'] != NULL )
-            {
-                $debate = Debate::where('id', $request['joinDebateId'])->first();
                 if( $debate != NULL )
                 {
                     if( $debate->password == $request['joinPassword'] && $debate->debator_one != Auth::user()->email && $debate->debator_two != Auth::user()->email )
@@ -209,10 +222,10 @@ class DebateController extends Controller
                     return view('debate.error')->with('error', 'No such debate...');
             }
             else
-                return redirect('join');
+                return redirect('login');
         }
         else
-            return response()->json( 'noauth' );
+            return redirect('join');
     }
 
     /**
@@ -445,7 +458,7 @@ class DebateController extends Controller
                 'email' => $request['email']
             ]);
 
-            // Mail::send('emails.invitation', ['debateid' => $debate->id, 'topic' => $debate->topic], function ($m) use ($invite) {
+            // Mail::send('emails.invitation', ['debate' => $debate], function ($m) use ($invite) {
 
             //     $m->to($invite->email)->subject('You got an invitation!');
             // });
