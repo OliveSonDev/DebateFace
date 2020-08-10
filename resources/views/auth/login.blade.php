@@ -68,4 +68,16 @@
         </div>
     </div>
 </div>
+
+@if (isset($error))
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" ></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.css"/>
+<script>
+    $(document).ready(function() {
+        toastr.warning('{{ $error }}');
+    });
+</script>
+@endif
+
 @endsection

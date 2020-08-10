@@ -118,7 +118,7 @@
     </div>
 </div>
 <script>
-$(function() {
+// $(function() {
     // $('#submitBtn').click(function() {
     //     var debateData = {
     //         topic: $("input[name=debatetype]").val(),
@@ -150,6 +150,6 @@ $(function() {
     //     });
     //     return false;
     // }); 
-});
+// });
 </script>
 @endsection

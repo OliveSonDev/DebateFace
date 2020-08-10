@@ -387,29 +387,29 @@
                 </div>
             @endif
             <div class = "row">
-                <div class="col-md-5 offset-md-1">
+                <div class="col-md-6">
                     <div class = "commentsPane mt-5" id = "commentsPanelOne">
                         @foreach ($commentsone as $comment)
                         <div class = "row mt-2">
                             <div class = "col-md-2 text-right">
                                 {{ $comment->username }}
                             </div>
-                            <div class = "col-md-10 pb-2 commentDivider">
+                            <div class = "col-md-10 pb-2 ">
                                 <div class = "commentText"> {{ $comment->text }} </div>
                             </div>
                         </div>
                         @endforeach
                     </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div class = "commentsPane mt-5" id = "commentsPanelTwo">
                         @foreach ($commentstwo as $comment)
                         <div class = "row mt-2">
-                            <div class = "col-md-2 text-right">
-                                {{ $comment->username }}
-                            </div>
-                            <div class = "col-md-10 pb-2 commentDivider">
+                            <div class = "col-md-10 pb-2">
                                 <div class = "commentText"> {{ $comment->text }} </div>
+                            </div>
+                            <div class = "col-md-2 text-left">
+                                {{ $comment->username }}
                             </div>
                         </div>
                         @endforeach
@@ -943,6 +943,7 @@ function newRemoteFeed(id, display, audio, video) {
             Janus.debug("Remote feed #" + remoteFeed.rfindex);
             console.log('start', remoteFeed);
             Janus.attachMediaStream($('#'+remoteFeed.rfdisplay).get(0), stream);
+            console.log( stream.getAudioTracks(), stream.getVideoTracks() );
         }
     });
 }
@@ -1032,20 +1033,40 @@ function addComment( username, text, type )
     var comment = document.createElement("div");
     comment.className = "row mt-2";
     
-    var usernamePane = document.createElement("div");
-    usernamePane.className = "col-md-2 text-right";
-    usernamePane.innerHTML = username;
-    
-    var commentPane = document.createElement("div");
-    commentPane.className = "col-md-8 pb-2 commentDivider";
-    
-    var commentText = document.createElement("div");
-    commentText.className = "commentText";
-    commentText.innerHTML = text;
-    commentPane.appendChild( commentText );
+    if( type == 'one' )
+    {
+        var usernamePane = document.createElement("div");
+        usernamePane.className = "col-md-2 text-right";
+        usernamePane.innerHTML = username;
+        
+        var commentPane = document.createElement("div");
+        commentPane.className = "col-md-10 pb-2";
+        
+        var commentText = document.createElement("div");
+        commentText.className = "commentText";
+        commentText.innerHTML = text;
+        commentPane.appendChild( commentText );
 
-    comment.appendChild( usernamePane );
-    comment.appendChild( commentPane );
+        comment.appendChild( usernamePane );
+        comment.appendChild( commentPane );
+    }
+    else
+    {
+        var commentPane = document.createElement("div");
+        commentPane.className = "col-md-10 pb-2";
+        
+        var usernamePane = document.createElement("div");
+        usernamePane.className = "col-md-2 text-left";
+        usernamePane.innerHTML = username;
+        
+        var commentText = document.createElement("div");
+        commentText.className = "commentText";
+        commentText.innerHTML = text;
+        commentPane.appendChild( commentText );
+
+        comment.appendChild( commentPane );
+        comment.appendChild( usernamePane );
+    }
 
     var commentsPanel;
     if( type == 'one' )
@@ -1067,7 +1088,7 @@ function comment( type ){
     $.ajax({
         type:'POST',
         url:"{{ route('comment') }}",
-        data:{ roomId: roomId, text: text },
+        data:{ roomId: roomId, text: text, who: type },
         success: function( name ){
             if( username != 'moderator' )
                 sfutest.data({

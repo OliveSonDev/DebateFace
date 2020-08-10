@@ -59,7 +59,7 @@ class DebateController extends Controller
     public function gostart(Request $request)
     {
         if( !Auth::check() )
-            return redirect('login');
+            return view('auth.login')->with('error', 'Sorry, you should be logged in to create debates.');
 
         $debate = Debate::create([
             'topic' => $request['topic'],
@@ -178,9 +178,9 @@ class DebateController extends Controller
     }
 
     /**
-     * Join/Watch a debate
+     * Watch a debate
      */
-    public function goForJoin(Request $request)
+    public function goForWatch(Request $request)
     {
         if( $request['watchDebateId'] != NULL )
         {
@@ -189,7 +189,16 @@ class DebateController extends Controller
             else
                 return redirect('debate/'.$request['watchDebateId'].'/'.base64_encode( $request['watchPassword'] ) );
         }
-        else if( $request['joinDebateId'] != NULL )
+        else
+            return redirect('join');
+    }
+
+    /**
+     * Join a debate
+     */
+    public function goForJoin(Request $request)
+    {
+        if( $request['joinDebateId'] != NULL )
         {
             $debate = Debate::where('id', $request['joinDebateId'])->first();
 
@@ -222,7 +231,7 @@ class DebateController extends Controller
                     return view('debate.error')->with('error', 'No such debate...');
             }
             else
-                return redirect('login');
+                return view('auth.login')->with('error', 'Sorry, you should be logged in to join debates.');
         }
         else
             return redirect('join');
@@ -417,8 +426,14 @@ class DebateController extends Controller
         if( !Auth::check() )
             return response()->json( 'noauth' );
         
+        $username = Auth::user()->name;
+        
+        $debate = Debate::where('id', $request['roomId'])->first();
+        if( $debate != NULL && $debate->moderator == Auth::user()->id )
+            $username = 'Moderator';
+        
         $comment = Comments::create([
-            'username' => Auth::user()->name,
+            'username' => $username,
             'debateid' => $request['roomId'],
             'text' => $request['text'],
             'who' => $request['who']

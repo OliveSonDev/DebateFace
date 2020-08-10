@@ -77,9 +77,18 @@
 
 .commentText {
     width: 100%;
-    border: 0px ;
-    border-radius: 5px;
+    border: 0px;
     resize: none;
+    background-color: lightgrey;
+    padding: 5px 10px;
+    border-radius: 8px;
+    word-wrap: break-word;
+    transition: 0.3s;
+}
+
+.commentText:hover {
+    background-color: darkgrey;
+    cursor: pointer;
 }
 
 .myCommentText {

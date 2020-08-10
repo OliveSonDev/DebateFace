@@ -30,7 +30,10 @@ Route::get('/debate/{id}/{password}', 'DebateController@debate')->name('debate')
 // Get User Name of Debator
 Route::post('/getusername', 'DebateController@getUserName')->name('getusername');
 
-//Check role and Watch / Join
+//Simply watch debate
+Route::post('/goforwatch', 'DebateController@goForWatch')->name('goforwatch');
+
+//Check role and Join
 Route::post('/goforjoin', 'DebateController@goForJoin')->name('goforjoin');
 
 // Get Admin Key

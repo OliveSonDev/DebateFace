@@ -12,7 +12,7 @@ class Comments extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'username', 'debateid', 'text', 'created_at', 'updated_at'
+        'id', 'username', 'debateid', 'text', 'who', 'created_at', 'updated_at'
     ];
 
     protected $table = 'comments';
